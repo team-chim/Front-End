@@ -1,0 +1,22 @@
+{
+    "name": "db-proj",
+    "version": "1.0.0",
+    "description": "Team Chim DB Proj",
+    "author": "kanottonp <kanottonp@gmail.com>",
+    "private": true,
+    "scripts": {
+        "dev": "cross-env HOST=0.0.0.0 PORT=3333 nuxt",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate",
+        "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+        "precommit": "npm run lint"
+    },
+    "dependencies": {
+        "ajv": "^6.4.0",
+        "nuxt": "^1.0.0"
+    },
+    "devDependencies": {
+        "cross-env": "^5.1.4"
+    }
+}
