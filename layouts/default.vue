@@ -4,6 +4,19 @@
   </div>
 </template>
 
+<script>
+import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue);
+export default {
+
+}
+</script>
+
+
 <style>
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -34,6 +47,7 @@ html {
 .button--green:hover {
   color: #fff;
   background-color: #3b8070;
+  cursor: pointer;
 }
 
 .button--grey {
@@ -49,5 +63,6 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+  cursor: pointer;
 }
 </style>

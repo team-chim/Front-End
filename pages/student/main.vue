@@ -31,13 +31,13 @@ export default {
 
   method: {
     goStudent () {
-      this.$router.push('/student/main')
+      this.$router.push({ path: '/student/main'})
     },
     goStudent () {
-      this.$router.push('/teacher/main')
+      this.$router.push({ path: '/teacher/main'})
     },
     goStaff () {
-      this.$router.push('/staff/main')
+      this.$router.push({ path: '/staff/main'})
     }
   }
 }

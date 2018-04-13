@@ -13,9 +13,9 @@
       <input class="input-container" placeholder="Password">
       </div>
       <div class="links">
-        <span class="button--grey" v-on:click="goStudent">Login as Student</span>
-        <span class="button--grey" v-on:click="goTeacher">Login as Teacher</span>
-        <span class="button--green" v-on:click="goStaff">Login as Staff</span>
+        <a class="button--grey" v-on::click="goStudent">Login as Student</a>
+        <a class="button--grey" v-on::click="goTeacher">Login as Teacher</a>
+        <a class="button--green" v-on::click="goStaff">Login as Staff</a>
       </div>
     </div>
   </section>
@@ -31,13 +31,13 @@ export default {
 
   method: {
     goStudent () {
-      this.$router.push('/student/main')
+      this.$router.push({ path: '/student/main'})
     },
     goStudent () {
-      this.$router.push('/teacher/main')
+      this.$router.push({ path: '/teacher/main'})
     },
     goStaff () {
-      this.$router.push('/staff/main')
+      this.$router.push({ path: '/staff/main'})
     }
   }
 }
