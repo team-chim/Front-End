@@ -2,7 +2,7 @@
   <section class="container">
       <div>
        <b-navbar toggleable="md" type="dark" variant="info">
-        <b-navbar-brand href="/staff/main">Staff</b-navbar-brand>
+        <b-navbar-brand href="#">Staff</b-navbar-brand>
        <b-navbar-nav class="ml-auto">
          <b-nav-item href="/" right>Signout</b-nav-item>
         </b-navbar-nav>
@@ -27,7 +27,7 @@
               <li><a href="/staff/createinternship">เพิ่มปีการศึกษา/Section ของวิชาฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightpink">main</b-col>
+          <b-col style="background-color: lightpink">เพิ่มข้อมูล Section</b-col>
         </b-row>
       </b-container>
     </div>

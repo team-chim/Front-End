@@ -13,9 +13,13 @@
       <input class="input-container" placeholder="Password">
       </div>
       <div class="links">
-        <span class="button--grey" v-on:click="goStudent">Login as Student</span>
+        <!-- <span class="button--grey" v-on:click="goStudent">Login as Student</span>
         <span class="button--grey" v-on:click="goTeacher">Login as Teacher</span>
-        <span class="button--green" v-on:click="goStaff">Login as Staff</span>
+        <span class="button--green" v-on:click="goStaff">Login as Staff</span> -->
+        <nuxt-link :to="'/student/main'" class="button--grey">Login as Student</nuxt-link>
+        <nuxt-link :to="'/teacher/main'" class="button--grey" >Login as Teacher</nuxt-link>
+        <nuxt-link :to="'/staff/main'" class="button--green">Login as Staff</nuxt-link>
+
       </div>
     </div>
   </section>
@@ -31,26 +35,20 @@ export default {
 
   method: {
     goStudent () {
-      this.$router.push('/student/main')
+      this.$router.push({ name: 'student-main'})
     },
     goStudent () {
-      this.$router.push('/teacher/main')
+      this.$router.push({ name: 'teacher-main'})
     },
     goStaff () {
-      this.$router.push('/staff/main')
+      this.$router.push({ name: 'staff-main'})
     }
   }
 }
 </script>
 
 <style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+
 
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
@@ -86,5 +84,43 @@ export default {
   border-radius: 3px;
   margin-top: 5px;
   border: 2px solid #ececec
+}
+
+html {
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  word-spacing: 1px;
+}
+
+.button--green {
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #3b8070;
+  color: #3b8070;
+  text-decoration: none;
+  padding: 10px 30px;
+
+}
+
+.button--green:hover {
+  color: #fff;
+  background-color: #3b8070;
+  cursor: pointer;
+}
+
+.button--grey {
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #35495e;
+  color: #35495e;
+  text-decoration: none;
+  padding: 10px 30px;
+  margin-right: 15px;
+}
+
+.button--grey:hover {
+  color: #fff;
+  background-color: #35495e;
+  cursor: pointer;
 }
 </style>

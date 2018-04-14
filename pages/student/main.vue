@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section>
     <div>
       <img src="/Chimchim.jpg" class="chim">
       <h1 class="title">
@@ -46,7 +46,7 @@ export default {
 <style>
 .container {
   min-height: 100vh;
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   text-align: center;

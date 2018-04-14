@@ -27,7 +27,7 @@
               <li><a href="/staff/createinternship">เพิ่มปีการศึกษา/Section ของวิชาฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightpink">main</b-col>
+          <b-col style="background-color: lightpink">เพิ่มบริษัท</b-col>
         </b-row>
       </b-container>
     </div>
