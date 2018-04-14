@@ -17,7 +17,7 @@
               <li><a href="/teacher/searchcourse">ค้นหารายวิชาเรียน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: azure">main</b-col>
+          <b-col style="background-color: azure">ดูรายชื่อนิสิตที่ปรึกษา</b-col>
         </b-row>
       </b-container>
     </div>

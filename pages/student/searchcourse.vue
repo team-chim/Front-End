@@ -30,7 +30,7 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">main</b-col>
+          <b-col style="background-color: lightblue">ค้นหารายวิชาเรียน</b-col>
         </b-row>
       </b-container>
     </div>
