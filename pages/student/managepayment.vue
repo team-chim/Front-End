@@ -30,7 +30,24 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ตรวจสถานะการจ่ายเงินค่าเล่าเรียน</b-col>
+          <b-col style="background-color: lightblue; align-contents= center;">
+            <div style="margin-top: 3px; margin-bottom: 3px;"><b>ตรวจสถานะการจ่ายเงินค่าเล่าเรียน</b></div><br>
+            <div style="margin-bottom: 3px;">ค่าเทอมของคุณคือ : {{ fee }} บาท</div><br>
+            <div style="margin-bottom: 10px;"><b>ประวัติการจ่ายเงิน</b></div>
+            <div style="display: flex; justify-content: center;"><table border = "1" style="margin-top: 20px; align-self: center;">
+              <tr>
+                <th>ปีการศึกษา</th>
+                <th>ภาคการศึกษา</th>
+                <th>สถานะการจ่ายเงิน</th>
+              </tr>
+              <tr v-for="payment in payments" :key="payment.Year">
+                <td>{{ payment.Year}}</td>
+                <td>{{ payment.Semester === 1 ? "ต้น" : payment.Semester === 2 ? "ปลาย" : "ฤดูร้อน"}}</td>
+                <td>{{ payment.PaymentStatus === "Success" ? "จ่ายแล้ว" : "ยังไม่ได้จ่าย" }}</td>
+              </tr>
+            </table>
+            </div>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -38,6 +55,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -51,6 +71,47 @@ function getCookie(cname) {
 }
 
 export default {
+
+  data: function() {
+      return {
+        payments: [],
+        fee: 0
+      }
+  },
+
+  mounted: function() {
+
+      this.payments = []
+
+      var studentid = getCookie('username')
+
+      axios.get(`http://localhost:3145/api/v1/student/fee?studentid=${studentid}`,{
+        headers: {
+          'Authorization' : studentid
+        }
+      }).then((data) => {
+         this.fee = data.data[0].Fee
+      })
+
+
+
+      axios.get(`http://localhost:3145/api/v1/student/payments?studentid=${studentid}`,{
+        headers: {
+          'Authorization' : studentid
+        }
+      }).then((data) => {
+          data.data.forEach(element => {
+            this.payments.push(element)
+          });
+
+      })
+
+      console.log(this.fee)
+      console.log(this.payments)
+
+
+  },
+
   components: {
   },
 
@@ -73,6 +134,7 @@ export default {
 .container1 {
   min-width : 100vw;
   min-height: calc(10/16*100vw);
+
 }
 
 
@@ -83,5 +145,6 @@ export default {
   border-radius: 3px;
   margin-top: 5px;
   border: 2px solid #ececec
+
 }
 </style>

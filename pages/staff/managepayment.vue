@@ -27,7 +27,25 @@
               <li><a href="/staff/createinternship">เพิ่มปีการศึกษา/Section ของวิชาฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightpink">ตรวจสถานะการจ่ายเงินค่าเล่าเรียน</b-col>
+          <b-col style="background-color: lightpink">
+          <div style="margin-top:3px;margin-bottom: 3px;"><b>ตรวจสถานะการจ่ายเงินค่าเล่าเรียน</b></div>
+          <div style="margin-bottom: 10px;"><b>ประวัติการจ่ายเงิน</b></div>
+            <div style="display: flex; justify-content: center;"><table border = "1" style="margin-top: 20px; align-self: center;">
+              <tr>
+                <th>รหัสประจำตัวนิสิต</th>
+                <th>ปีการศึกษา</th>
+                <th>ภาคการศึกษา</th>
+                <th>สถานะการจ่ายเงิน</th>
+              </tr>
+              <tr v-for="payment in payments" :key="payment.StudentID">
+                <td>{{ payment.StudentID}}</td>
+                <td>{{ payment.Year}}</td>
+                <td>{{ payment.Semester === 1 ? "ต้น" : payment.Semester === 2 ? "ปลาย" : "ฤดูร้อน"}}</td>
+                <td>{{ payment.PaymentStatus === "Success" ? "จ่ายแล้ว" : "ยังไม่ได้จ่าย" }}</td>
+              </tr>
+            </table>
+            </div>
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -35,6 +53,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -48,7 +68,34 @@ function getCookie(cname) {
 }
 
 export default {
+  data: function() {
+    return {
+      payments: []
+    }
+  },
   components: {
+  },
+
+  mounted: function() {
+
+      this.payments = []
+
+      const staffid = getCookie('user')
+
+      axios.get(`http://localhost:3145/api/v1/unpaid`,{
+        headers: {
+          'Authorization' : staffid
+        }
+      }).then((data) => {
+          data.data.forEach(element => {
+            this.payments.push(element)
+          });
+
+      })
+
+      console.log(this.payments)
+
+
   },
 
   method: {
