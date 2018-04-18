@@ -17,7 +17,14 @@
               <li><a href="/teacher/searchcourse">ค้นหารายวิชาเรียน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: azure">ค้นหารายวิชาเรียน</b-col>
+          <b-col style="background-color: azure">
+            <div>ค้นหารายวิชาเรียน</div>
+            <b-col>
+
+            </b-col>
+            <b-col>
+            </b-col>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -25,9 +32,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
 
 export default {
-  components: {
+  data: function(){
+    return {
+
+    }
   },
 
   method: {

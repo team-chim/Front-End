@@ -38,8 +38,42 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
 
 export default {
+
+  data: function(){
+    return {
+    allSubjects: [],
+    subject: []
+    }
+  },
+
+  mounted: function() {
+    console.log(`Hello`)
+      this.allSubject = []
+      axios.get(`localhost:3145/api/v1/subjects`, [])
+        .then((data) => {
+          data.forEach(element => {
+            allSubjects.push(element)
+          });
+          console.log(allSubjects)
+      })
+
+  },
+
   components: {
   },
 

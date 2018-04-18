@@ -9,17 +9,13 @@
         By Team Chim DB Proj
       </h2>
       <div style="margin-bottom: 10px;">
-      <input class="input-container" placeholder="Username"><br>
-      <input class="input-container" placeholder="Password">
+      <input class="input-container" placeholder="Username" v-model="username"><br>
+      <input class="input-container" placeholder="Password" v-model="password">
       </div>
       <div class="links">
-        <!-- <span class="button--grey" v-on:click="goStudent">Login as Student</span>
+        <span class="button--grey" v-on:click="goStudent">Login as Student</span>
         <span class="button--grey" v-on:click="goTeacher">Login as Teacher</span>
-        <span class="button--green" v-on:click="goStaff">Login as Staff</span> -->
-        <nuxt-link :to="'/student/main'" class="button--grey">Login as Student</nuxt-link>
-        <nuxt-link :to="'/teacher/main'" class="button--grey" >Login as Teacher</nuxt-link>
-        <nuxt-link :to="'/staff/main'" class="button--green">Login as Staff</nuxt-link>
-
+        <span class="button--green" v-on:click="goStaff">Login as Staff</span>
       </div>
     </div>
   </section>
@@ -28,22 +24,38 @@
 <script>
 import Vue from 'vue'
 
-
 export default {
-  components: {
+
+  data: function() {
+    return {
+      username : '',
+      password : ''
+    }
   },
 
-  method: {
+  methods: {
     goStudent () {
-      this.$router.push({ name: 'student-main'})
+        let d = new Date()
+        d.setTime(d.getTime() + 3000000)
+        document.cookie = `username=${this.username}; expires=${d.toUTCString()}`
+        this.$router.push({ name: 'student-main'})
+
     },
-    goStudent () {
-      this.$router.push({ name: 'teacher-main'})
+    goTeacher () {
+        let d = new Date()
+        d.setTime(d.getTime() + 3000000)
+        document.cookie = `username=${this.username}; expires=${d.toUTCString()}`
+        this.$router.push({ name: 'teacher-main'})
     },
     goStaff () {
-      this.$router.push({ name: 'staff-main'})
+        console.log(this.username)
+        let d = new Date()
+        d.setTime(d.getTime() + 3000000)
+        document.cookie = `username=${this.username}; expires=${d.toUTCString()}`
+        this.$router.push({ name: 'staff-main'})
     }
   }
+
 }
 </script>
 
