@@ -20,7 +20,7 @@ export default {
 <style>
 .container {
   min-width : 100vw;
-  min-height: calc(10/16*100vw);
+  min-height: calc((10/16)*100vw);
   display: -webkit-flex;
   justify-content: center;
   align-items: center;
