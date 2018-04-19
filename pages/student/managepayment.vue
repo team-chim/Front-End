@@ -57,7 +57,7 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
-
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -85,7 +85,7 @@ export default {
 
       var studentid = getCookie('username')
 
-      axios.get(`http://localhost:3145/api/v1/student/fee?studentid=${studentid}`,{
+      axios.get(API + `/v1/student/fee?studentid=${studentid}`,{
         headers: {
           'Authorization' : studentid
         }
@@ -93,9 +93,7 @@ export default {
          this.fee = data.data[0].Fee
       })
 
-
-
-      axios.get(`http://localhost:3145/api/v1/student/payments?studentid=${studentid}`,{
+      axios.get(API + `/v1/student/payments?studentid=${studentid}`,{
         headers: {
           'Authorization' : studentid
         }
