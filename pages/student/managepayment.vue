@@ -90,16 +90,15 @@ export default {
           'Authorization' : studentid
         }
       }).then((data) => {
-         this.fee = data.data[0].Fee
+         this.fee = data.data.Fee
       })
-
-
 
       axios.get(`http://localhost:3145/api/v1/student/payments?studentid=${studentid}`,{
         headers: {
           'Authorization' : studentid
         }
       }).then((data) => {
+        console.log(data.data)
           data.data.forEach(element => {
             this.payments.push(element)
           });
