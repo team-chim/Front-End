@@ -55,6 +55,7 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -82,7 +83,7 @@ export default {
 
       const staffid = getCookie('user')
 
-      axios.get(`http://localhost:3145/api/v1/unpaid`,{
+      axios.get(API + `/v1/unpaid`,{
         headers: {
           'Authorization' : staffid
         }

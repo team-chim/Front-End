@@ -22,4 +22,6 @@ COPY . .
 ## Production
 RUN npm run build
 EXPOSE 8000
-CMD npm start
+
+CMD /bin/bash change_hosts.sh && \
+    npm start

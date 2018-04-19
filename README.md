@@ -26,10 +26,12 @@ For detailed explanation on how things work, checkout the [Nuxt.js docs](https:/
 
 Build the docker image using:
 ```
-sudo docker build -t db/front .
+$ docker build -t db/front .
 ```
+This will create a docker image named `db/front`.
 
-Then create and run a container using:
+Then create and run a container using
 ```
-sudo docker run -p 8000:8000 --name node-db --rm -it db/front
+$ docker run -p 8000:8000 --link db-backend:db-backend --name node-db --rm -it db/front
 ```
+This will link with an existing `db-backend` without exposing `db-backend` publicly.
