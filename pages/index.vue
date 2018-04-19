@@ -10,7 +10,7 @@
       </h2>
       <div style="margin-bottom: 10px;">
       <input class="input-container" placeholder="Username" v-model="username"><br>
-      <input class="input-container" placeholder="Password" v-model="password">
+      <input class="input-container" type="password" placeholder="Password" v-model="password">
       </div>
       <div class="links">
         <span class="button--grey" v-on:click="goStudent">Login as Student</span>
