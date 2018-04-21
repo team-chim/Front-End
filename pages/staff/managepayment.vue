@@ -28,8 +28,8 @@
             </ul>
           </b-col>
           <b-col style="background-color: lightpink">
-          <div style="margin-top:3px;margin-bottom: 3px;"><b>ตรวจสถานะการจ่ายเงินค่าเล่าเรียน</b></div>
-          <div style="margin-bottom: 10px;"><b>ประวัติการจ่ายเงิน</b></div>
+          <div style="margin-top:3px;margin-bottom: 3px;"><b>ตรวจสอบการจ่ายเงินของนิสิต</b></div>
+          <div style="margin-bottom: 10px;"><b></b></div>
             <div style="display: flex; justify-content: center;"><table border = "1" style="margin-top: 20px; align-self: center;">
               <tr>
                 <th>รหัสประจำตัวนิสิต</th>
@@ -77,13 +77,22 @@ export default {
   components: {
   },
 
+    beforeMount: function() {
+        console.log("hello")
+        console.log(getCookie('username'))
+        if (getCookie('username') === ""){
+        alert("Session Timeout!")
+        this.$router.push('/')
+        }
+  },
+
   mounted: function() {
 
       this.payments = []
 
       const staffid = getCookie('user')
 
-      axios.get(API + `/v1/unpaid`,{
+      axios.get(API + `v2/students/unpaid`,{
         headers: {
           'Authorization' : staffid
         }

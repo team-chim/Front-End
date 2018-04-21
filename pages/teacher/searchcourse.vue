@@ -42,6 +42,15 @@ export default {
     }
   },
 
+    beforeMount: function() {
+        console.log("hello")
+        console.log(getCookie('username'))
+        if (getCookie('username') === ""){
+        alert("Session Timeout!")
+        this.$router.push('/')
+        }
+  },
+
   method: {
     goStudent () {
       this.$router.push({ path: '/student/main'})

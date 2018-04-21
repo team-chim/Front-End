@@ -11,6 +11,7 @@
         <b-row class="container1">
           <b-col cols="2" style="background-color: #efefef; align-items:flex-start;justify-content:flex-start;">
             <ul style="margin-top: 10px;"> <b>ลงทะเบียน</b>
+              <li><a href="/student/studentinfo">ข้อมุลส่วนตัว</a></li>
               <li><a href="/student/registercourse">ลงทะเบียนเรียน</a></li>
               <li><a href="/student/viewregisteredcourse">ดูผลการลงทะเบียนเรียน</a></li>
               <li><a href="/student/managecourse">เพิ่ม ลด วิชาเรียน</a></li>
@@ -30,7 +31,26 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ค้นหาข้อเสนอการฝึกงาน</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top:10px; margin-bottom: 3px"><h2><b>ค้นหาข้อเสนอการฝึกงาน</b></h2></div>
+            <div style="display: flex; justify-content: center;"><table border = "1" style="margin-top: 20px; align-self: center;">
+              <tr>
+                <th>Offer ID</th>
+                <th>ปี</th>
+                <th>บริษัท</th>
+                <th>ตำแหน่ง</th>
+                <th>คำอธิบาย</th>
+              </tr>
+              <tr v-for="offer in offers" :key="offer.OfferID">
+                <td>{{ offer.OfferID}}</td>
+                <td>{{ offer.Year}}</td>
+                <td>{{ offer.NameEN}}</td>
+                <td>{{ offer.PositionNameEN }}<br>{{ offer.PositionNameTH === null ? "" : offer.PositionNameTH }}</td>
+                <td>{{ offer.PositionDescriptionEN }}<br>{{ offer.PositionDescriptionTH === null ? "" : offer.PositionDescriptionTH }}</td>
+              </tr>
+            </table>
+            </div>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -38,6 +58,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -51,7 +74,34 @@ function getCookie(cname) {
 }
 
 export default {
-  components: {
+  data: function() {
+      return {
+        offers: []
+      }
+  },
+
+  mounted: function () {
+
+      this.offers = []
+
+      var studentid = getCookie('username')
+
+      axios.get(API + `/v2/offers/`,{
+        headers: {
+          'Authorization' : studentid
+        }
+      }).then((data) => {
+         this.offers = data.data
+      })
+  },
+
+    beforeMount: function() {
+        console.log("hello")
+        console.log(getCookie('username'))
+        if (getCookie('username') === ""){
+        alert("Session Timeout!")
+        this.$router.push('/')
+        }
   },
 
   method: {

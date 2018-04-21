@@ -31,7 +31,66 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ลงทะเบียนเรียน</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top:10px; margin-bottom: 3px;"><h2><b>ข้อมูลส่วนตัว</b></h2></div>
+            <div style="display: flex; justify-content: center;">
+              <table border = "1" style="margin-top: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>รหัสนิสิต</th>
+                <td>{{studentinfo.StudentID === null ? "-" : studentinfo.StudentID }}</td>
+              </tr>
+              <tr>
+                <th>ชื่อ</th>
+                <td>{{studentinfo.FnameTH === null ? "-" : studentinfo.FnameTH }}</td>
+              </tr>
+              <tr>
+                <th>ชื่อกลาง</th>
+                <td>{{studentinfo.MnameTH === null ? "-" : studentinfo.MnameTH }}</td>
+              </tr>
+              <tr>
+                <th>นามสกุล</th>
+                <td>{{studentinfo.LnameTH === null ? "-" : studentinfo.LnameTH}}</td>
+              </tr>
+              <tr>
+                <th>First Name</th>
+                <td>{{studentinfo.FnameEN === null ? "-" : studentinfo.FnameEN }}</td>
+              </tr>
+              <tr>
+                <th>Middle Name</th>
+                <td>{{studentinfo.MnameEN === null ? "-" : studentinfo.MnameEN }}</td>
+              </tr>
+              <tr>
+                <th>Last Name</th>
+                <td>{{studentinfo.LnameEN === null ? "-" : studentinfo.LnameEN}}</td>
+              </tr>
+              <tr>
+                <th>สัญชาติ</th>
+                <td>{{studentinfo.Nation === "Thai" ? "ไทย" : studentinfo.Nation}}</td>
+              </tr>
+              <tr>
+                <th>คณะ (Faculty)</th>
+                <td>{{studentinfo.FacultyNameTH === null ? "-" : studentinfo.FacultyNameTH}} ({{studentinfo.FacultyNameEN === null ? "-" : studentinfo.FacultyNameEN}})</td>
+              </tr>
+              <tr>
+                <th>สาขา (Department)</th>
+                <td>{{studentinfo.DepartmentNameTH === null ? "-" : studentinfo.DepartmentNameTH}} ({{studentinfo.DepartmentNameEN === null ? "-" : studentinfo.DepartmentNameEN}})</td>
+              </tr>
+              <tr>
+                <th>ปีที่เข้าเรียน (Enter Year)</th>
+                <td>{{studentinfo.EnterYear === null ? "-" : studentinfo.EnterYear}}</td>
+              </tr>
+              <tr>
+              <tr>
+                <th>เกรดเฉลี่ยรวม (GPAX)</th>
+                <td>{{studentinfo.GPAX === null ? "-" : studentinfo.GPAX}}</td>
+              </tr>
+              <tr>
+                <th>อีเมล (E-mail Address)</th>
+                <td>{{studentinfo.StudentEmail === null ? "-" : studentinfo.StudentEmail}}</td>
+              </tr>
+            </table>
+            </div>
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -39,6 +98,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -52,16 +114,42 @@ function getCookie(cname) {
 }
 
 export default {
-  components: {
+
+  data: function () {
+      return {
+        studentinfo: {}
+      }
   },
 
-    beforeMount: function() {
+  components: {
+
+  },
+
+
+  beforeMount: function() {
         console.log("hello")
         console.log(getCookie('username'))
         if (getCookie('username') === ""){
         alert("Session Timeout!")
         this.$router.push('/')
         }
+  },
+
+  mounted : function() {
+
+      this.studentinfo = {}
+
+      var studentid = getCookie('username')
+
+      axios.get(API + `/v2/students/${studentid}/`,{
+        headers: {
+          'Authorization' : studentid
+        }
+      }).then((data) => {
+        this.studentinfo = data.data[0]
+        console.log(this.studentinfo)
+      })
+
   },
 
   method: {

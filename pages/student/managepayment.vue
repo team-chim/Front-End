@@ -34,8 +34,10 @@
             <div style="margin-top: 3px; margin-bottom: 3px;"><b>ตรวจสถานะการจ่ายเงินค่าเล่าเรียน</b></div><br>
             <div style="margin-bottom: 3px;">ค่าเทอมของคุณคือ : {{ fee }} บาท</div><br>
             <div style="margin-bottom: 10px;"><b>ประวัติการจ่ายเงิน</b></div>
-            <div style="display: flex; justify-content: center;"><table border = "1" style="margin-top: 20px; align-self: center;">
-              <tr>
+            <div style="display: flex; justify-content: center;">
+              <table border = "1" style="margin-top: 20px; align-self: center; width: 100%;">
+              <!-- <b-table striped hover :items="payments"></b-table> -->
+             <tr>
                 <th>ปีการศึกษา</th>
                 <th>ภาคการศึกษา</th>
                 <th>สถานะการจ่ายเงิน</th>
@@ -79,13 +81,22 @@ export default {
       }
   },
 
+    beforeMount: function() {
+        console.log("hello")
+        console.log(getCookie('username'))
+        if (getCookie('username') === ""){
+        alert("Session Timeout!")
+        this.$router.push('/')
+        }
+  },
+
   mounted: function() {
 
       this.payments = []
 
       var studentid = getCookie('username')
 
-      axios.get(API + `/v1/student/fee?studentid=${studentid}`,{
+      axios.get(API + `/v2/students/${studentid}/fee`,{
         headers: {
           'Authorization' : studentid
         }
@@ -93,11 +104,7 @@ export default {
          this.fee = data.data.Fee
       })
 
-<<<<<<< HEAD
-      axios.get(`http://localhost:3145/api/v1/student/payments?studentid=${studentid}`,{
-=======
-      axios.get(API + `/v1/student/payments?studentid=${studentid}`,{
->>>>>>> 941b9f5cdf4ad17126a1a4b530c92c6259fff40a
+      axios.get(API + `/v2/students/${studentid}/payments`,{
         headers: {
           'Authorization' : studentid
         }

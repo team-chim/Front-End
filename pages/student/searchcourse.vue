@@ -11,6 +11,7 @@
         <b-row class="container1">
           <b-col cols="2" style="background-color: #efefef; align-items:flex-start;justify-content:flex-start;">
             <ul style="margin-top: 10px;"> <b>ลงทะเบียน</b>
+              <li><a href="/student/studentinfo">ข้อมุลส่วนตัว</a></li>
               <li><a href="/student/registercourse">ลงทะเบียนเรียน</a></li>
               <li><a href="/student/viewregisteredcourse">ดูผลการลงทะเบียนเรียน</a></li>
               <li><a href="/student/managecourse">เพิ่ม ลด วิชาเรียน</a></li>
@@ -72,6 +73,15 @@ export default {
           console.log(allSubjects)
       })
 
+  },
+
+    beforeMount: function() {
+        console.log("hello")
+        console.log(getCookie('username'))
+        if (getCookie('username') === ""){
+        alert("Session Timeout!")
+        this.$router.push('/')
+        }
   },
 
   components: {
