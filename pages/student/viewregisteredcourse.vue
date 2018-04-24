@@ -31,7 +31,99 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ดูผลการลงทะเบียนเรียน</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top:10px; margin-bottom:10px;"><h1><b>ดูผลการเรียน</b></h1></div>
+            <div style="margin-bottom:3px;"><h2>First Semester of 2016</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Credit</th>
+                <th>Grade</th>
+              </tr>
+              <tr v-for="subject in firstTermOf2016" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Credit}}</td>
+                <td>{{subject.Grade === 4 ? "A" : subject.Grade === 3.5 ? "B" : subject.Grade === 3 ? "B" : subject.Grade === 2.5 ? "C+" : subject.Grade === 2 ? "C" : subject.Grade === 1.5 ? "D+" : subject.Grade === 1 ? "D" : subject.Grade}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Second Semester of 2016</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Credit</th>
+                <th>Grade</th>
+              </tr>
+              <tr v-for="subject in secondTermOf2016" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Credit}}</td>
+                <td>{{subject.Grade === 4 ? "A" : subject.Grade === 3.5 ? "B" : subject.Grade === 3 ? "B" : subject.Grade === 2.5 ? "C+" : subject.Grade === 2 ? "C" : subject.Grade === 1.5 ? "D+" : subject.Grade === 1 ? "D" : subject.Grade}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Summer Semester of 2016</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Credit</th>
+                <th>Grade</th>
+              </tr>
+              <tr v-for="subject in summerTermOf2016" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Credit}}</td>
+                <td>{{subject.Grade === 4 ? "A" : subject.Grade === 3.5 ? "B" : subject.Grade === 3 ? "B" : subject.Grade === 2.5 ? "C+" : subject.Grade === 2 ? "C" : subject.Grade === 1.5 ? "D+" : subject.Grade === 1 ? "D" : subject.Grade}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>First Semester of 2017</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Credit</th>
+                <th>Grade</th>
+              </tr>
+              <tr v-for="subject in firstTermOf2017" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Credit}}</td>
+                <td>{{subject.Grade === 4 ? "A" : subject.Grade === 3.5 ? "B" : subject.Grade === 3 ? "B" : subject.Grade === 2.5 ? "C+" : subject.Grade === 2 ? "C" : subject.Grade === 1.5 ? "D+" : subject.Grade === 1 ? "D" : subject.Grade}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Second Semester of 2017</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Credit</th>
+                <th>Grade</th>
+              </tr>
+              <tr v-for="subject in secondTermOf2017" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Credit}}</td>
+                <td>{{subject.Grade === 4 ? "A" : subject.Grade === 3.5 ? "B" : subject.Grade === 3 ? "B" : subject.Grade === 2.5 ? "C+" : subject.Grade === 2 ? "C" : subject.Grade === 1.5 ? "D+" : subject.Grade === 1 ? "D" : subject.Grade}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Summer Semester of 2017</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Credit</th>
+                <th>Grade</th>
+              </tr>
+              <tr v-for="subject in summerTermOf2017" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Credit}}</td>
+                <td>{{subject.Grade === 4 ? "A" : subject.Grade === 3.5 ? "B" : subject.Grade === 3 ? "B" : subject.Grade === 2.5 ? "C+" : subject.Grade === 2 ? "C" : subject.Grade === 1.5 ? "D+" : subject.Grade === 1 ? "D" : subject.Grade}}</td>
+              </tr>
+            </table>
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -39,6 +131,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -55,13 +150,56 @@ export default {
   components: {
   },
 
-    beforeMount: function() {
-        console.log("hello")
-        console.log(getCookie('username'))
-        if (getCookie('username') === ""){
-        alert("Session Timeout!")
-        this.$router.push('/')
+  data: function () {
+    return {
+      firstTermOf2016 :[],
+      secondTermOf2016 :[],
+      summerTermOf2016: [],
+      firstTermOf2017 :[],
+      secondTermOf2017 :[],
+      summerTermOf2017: []
+    }
+  },
+
+  beforeMount: function() {
+      if (getCookie('username') === ""){
+      alert("Session Timeout!")
+      this.$router.push('/')
+      }
+  },
+
+  mounted: function() {
+      this.firstTermOf2016 = []
+      this.secondTermOf2016 = []
+      this.summerTermOf2016 = []
+      this.firstTermOf2017 = []
+      this.secondTermOf2017 = []
+      this.summerTermOf2017 = []
+
+      var studentid = getCookie('username')
+
+
+      axios.get(API + `/v2/students/${studentid}/registered`,{
+        headers: {
+          'Authorization' : studentid
         }
+      }).then((data) => {
+        // console.log(data.data)
+        data.data.forEach(element => {
+          if (element.Year === 2016) {
+            element.Semester === 1 ? this.firstTermOf2016.push(element) :
+              element.Semester === 2 ? this.secondTermOf2016.push(element) : this.summerTermOf2016.push(element)
+          }
+          else if (element.Year === 2017) {
+            element.Semester === 1 ? this.firstTermOf2017.push(element) :
+              element.Semester === 2 ? this.secondTermOf2017.push(element) : this.summerTermOf2017.push(element)
+          }
+        })
+      })
+
+
+
+
   },
 
   method: {

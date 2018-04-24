@@ -31,7 +31,128 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ดูตารางเรียน</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top:10px; margin-bottom:10px;"><h1><b>ดูตารางเรียน</b></h1></div>
+            <div style="margin-bottom:3px;"><h2>Monday</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in mon" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.SectionNo}}</td>
+                <td>{{subject.Classroom}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Tuesday</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in tue" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.SectionNo}}</td>
+                <td>{{subject.Classroom}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Wednesday</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in wed" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.SectionNo}}</td>
+                <td>{{subject.Classroom}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Thursday</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in thu" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.SectionNo}}</td>
+                <td>{{subject.Classroom}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Friday</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in fri" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.SectionNo}}</td>
+                <td>{{subject.Classroom}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Saturday</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in sat" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.SectionNo}}</td>
+                <td>{{subject.Classroom}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Sunday</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in sun" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.SectionNo}}</td>
+                <td>{{subject.Classroom}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -39,6 +160,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -55,6 +179,18 @@ export default {
   components: {
   },
 
+  data: function () {
+    return {
+      sun:[],
+      mon :[],
+      tue: [],
+      wed :[],
+      thu :[],
+      fri: [],
+      sat: []
+    }
+  },
+
   beforeMount: function() {
         console.log("hello")
         console.log(getCookie('username'))
@@ -62,6 +198,35 @@ export default {
         alert("Session Timeout!")
         this.$router.push('/')
         }
+  },
+
+  mounted: function() {
+      this.sun = []
+      this.mon = []
+      this.tue = []
+      this.wed= []
+      this.thu = []
+      this.fri= []
+      this.sat = []
+
+      var studentid = getCookie('username')
+
+
+      axios.get(API + `/v2/students/${studentid}/schedules/study/2017/2`,{
+        headers: {
+          'Authorization' : studentid
+        }
+      }).then((data) => {
+        // console.log(data.data)
+        data.data.forEach(element => {
+            element.Day === "SU" ? this.sun.push(element) :
+              element.Day === "MO" ? this.mon.push(element) :
+                element.Day === "TU" ? this.tue.push(element) :
+                  element.Day === "WE" ? this.wed.push(element) :
+                   element.Day === "TH" ? this.thu.push(element) :
+                    element.Day === "FR" ? this.fri.push(element) : this.sat.push(element)
+        })
+      })
   },
 
   method: {

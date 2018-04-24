@@ -31,7 +31,9 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ค้นหารายวิชาเรียน</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top: 10px; margin-bottom 3px;"><h1><b>ค้นหารายวิชาเรียน</b></h1></div>
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -41,6 +43,7 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -62,26 +65,31 @@ export default {
     }
   },
 
-  mounted: function() {
-    console.log(`Hello`)
-      this.allSubject = []
-      axios.get(`localhost:3145/api/v1/subjects`, [])
-        .then((data) => {
-          data.forEach(element => {
-            allSubjects.push(element)
-          });
-          console.log(allSubjects)
-      })
-
+  beforeMount: function() {
+      if (getCookie('username') === ""){
+      alert("Session Timeout!")
+      this.$router.push('/')
+      }
   },
 
-    beforeMount: function() {
-        console.log("hello")
-        console.log(getCookie('username'))
-        if (getCookie('username') === ""){
-        alert("Session Timeout!")
-        this.$router.push('/')
+  mounted: function() {
+
+      this.allSubjects = []
+
+      var studentid = getCookie('username')
+
+      axios.get(API + `/v2/subjects/`, {
+        headers: {
+          'Authorization' : studentid
         }
+      })
+        .then((data) => {
+          data.data.forEach(element => {
+            this.allSubjects.push(element)
+          });
+          console.log(this.allSubjects)
+      })
+
   },
 
   components: {
@@ -96,7 +104,9 @@ export default {
     },
     goStaff () {
       this.$router.push({ path: '/staff/main'})
-    }
+    },
+
+
   }
 }
 </script>

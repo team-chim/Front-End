@@ -31,7 +31,43 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ดูตารางสอบ</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top:10px; margin-bottom:10px;"><h1><b>ดูตารางสอบ</b></h1></div>
+            <div style="margin-bottom:3px;"><h2>Midterm</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Date of Exam</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in midterm" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Date}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+            <div style="margin-bottom:3px;"><h2>Final</h2></div>
+            <table border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Subject ID</th>
+                <th>Name</th>
+                <th>Date of Exam</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+              </tr>
+              <tr v-for="subject in final" :key="subject.SubjectID">
+                <td>{{subject.SubjectID}}</td>
+                <td>{{subject.NameEN}}</td>
+                <td>{{subject.Date}}</td>
+                <td>{{subject.StartTime}}</td>
+                <td>{{subject.EndTime}}</td>
+              </tr>
+            </table>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -39,6 +75,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -55,6 +95,13 @@ export default {
   components: {
   },
 
+  data: function () {
+    return {
+      midterm:[],
+      final :[]
+    }
+  },
+
     beforeMount: function() {
         console.log("hello")
         console.log(getCookie('username'))
@@ -62,6 +109,46 @@ export default {
         alert("Session Timeout!")
         this.$router.push('/')
         }
+  },
+
+  mounted: function() {
+      this.midterm = []
+      this.final = []
+
+      var studentid = getCookie('username')
+
+
+      axios.get(API + `/v2/students/${studentid}/schedules/midterm/2017/2`,{
+        headers: {
+          'Authorization' : studentid
+        }
+      }).then((data) => {
+        data.data.forEach(element => {
+            var subject = {}
+            subject.SubjectID = element.SubjectID
+            subject.NameEN = element.NameEN
+            subject.Date = moment(element.FinalStartDatetime).utc().format("DD/MM/YYYY")
+            subject.StartTime = moment(element.FinalStartDatetime).utc().format("HH:MM")
+            subject.EndTime = moment(element.FinalEndDatetime).utc().format("HH:MM")
+            this.midterm.push(subject)
+        })
+      })
+
+      axios.get(API + `/v2/students/${studentid}/schedules/final/2017/2`,{
+        headers: {
+          'Authorization' : studentid
+        }
+      }).then((data) => {
+        data.data.forEach(element => {
+            var subject = {}
+            subject.SubjectID = element.SubjectID
+            subject.NameEN = element.NameEN
+            subject.Date = moment(element.FinalStartDatetime).utc().format("DD/MM/YYYY")
+            subject.StartTime = moment(element.FinalStartDatetime).utc().format("HH:MM")
+            subject.EndTime = moment(element.FinalEndDatetime).utc().format("HH:MM")
+            this.final.push(subject)
+        })
+      })
   },
 
   method: {
