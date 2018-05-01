@@ -54,10 +54,10 @@
             <ul style="margin-bottom: 2px;">{{subject.SubjectID}}</ul>
             <ul style="margin-bottom: 2px;">{{subject.NameEN}}</ul>
             <ul style="margin-bottom: 2px;">{{subject.NameTH}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.MidtermStartDatetime === undefined ? "" : `วันสอบกลางภาค: ${subject.MidtermStartDatetime}` }}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.FinalStartDatetime  === undefined ? "" : `วันสอบปลายภาค: ${subject.FinalStartDatetime}`}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul>
+            <ul style="margin-bottom: 2px;">{{subject.MidtermStartDatetime === undefined ? "" : `วันสอบกลางภาค: ${subject.MidtermStartDatetime} - ${subject.MidtermEndDatetime}`  }}</ul>
+            <!-- <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul> -->
+            <ul style="margin-bottom: 2px;">{{subject.FinalStartDatetime  === undefined ? "" : `วันสอบปลายภาค: ${subject.FinalStartDatetime} - ${subject.FinalEndDatetime}`}}</ul>
+            <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
           </b-col>
           </b-row>
             </b-col>
@@ -70,6 +70,7 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
+import moment from 'moment'
 const {API} =  require('../../api.config');
 
 function getCookie(cname) {
@@ -140,7 +141,11 @@ export default {
       })
         .then((data) => {
           this.subject = data.data
-          console.log(this.subject)
+          console.log(data.data.MidtermStartDatetime)
+          this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:MM")
+          this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:MM")
+          this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:MM")
+          this.subject.FinalEndDatetime = moment(data.data.FinalEndDatetime).utc().format("HH:MM")
       })
 
     },

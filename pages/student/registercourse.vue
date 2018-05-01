@@ -31,7 +31,12 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ลงทะเบียนเรียน</b-col>
+          <b-col style="background-color: lightblue">
+            <h1>ลงทะเบียนเรียน</h1><br>
+            <div>รหัสวิชา :<input v-model="SubjectID" placeholder="SubjectID"></div>
+            <div>หมายเลข Section :<input v-model="Section" placeholder="Section No."></div>
+            <button v-on:click="alert(`ลงทะเบียนเรียบร้อย`)">ลงทะเบียน</button>
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -55,6 +60,16 @@ export default {
   components: {
   },
 
+  data: function() {
+    return {
+      StudentID: 0,
+      SubjectID: 0,
+      Year: 2018,
+      Semester: 2,
+      SectionNo: 0
+    }
+  },
+
     beforeMount: function() {
         console.log("hello")
         console.log(getCookie('username'))
@@ -64,12 +79,15 @@ export default {
         }
   },
 
-  method: {
+  methods: {
     goStudent () {
       this.$router.push({ path: '/student/main'})
     },
     goStudent () {
       this.$router.push({ path: '/teacher/main'})
+    },
+    alert () {
+      alert(`ลงทะเบียนเรียบร้อย`)
     },
     goStaff () {
       this.$router.push({ path: '/staff/main'})
