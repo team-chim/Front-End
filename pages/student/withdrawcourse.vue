@@ -30,7 +30,10 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ถอนวิชาเรียน</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top: 3px; margin-bottom: 3px;"><h3><b>วิชาเรียนในปีการศึกษา {{year}} ภาคการศึกษา{{semester === 1 ? "ต้น" : semester === 2 ? "ปลาย" : "ภาคฤดูร้อน"}}</b></h3></div><br>
+            <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}} Section : {{subjects.SectionNo}}</a><button style="margin-left: 3px;" v-on:click="withdrawSubject(subjects.SubjectID,subjects.SectionNo)">ถอนรายวิชา</button></li>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -38,6 +41,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -54,16 +61,47 @@ export default {
   components: {
   },
 
-    beforeMount: function() {
-        console.log("hello")
-        console.log(getCookie('username'))
-        if (getCookie('username') === ""){
-        alert("Session Timeout!")
-        this.$router.push('/')
-        }
+  data: function(){
+    return {
+    allSubjects: [],
+    subject: {},
+    SubjectID: 0,
+    SectionNo: 0,
+    year: 2017,
+    semester: 2
+    }
   },
 
-  method: {
+  beforeMount: function() {
+      console.log("hello")
+      console.log(getCookie('username'))
+      if (getCookie('username') === ""){
+      alert("Session Timeout!")
+      this.$router.push('/')
+    }
+  },
+
+  mounted: function() {
+
+      this.allSubjects = []
+
+      var studentid = getCookie('username')
+
+      axios.get(API + `/v2/students/${studentid}/registered/${this.year}/${this.semester}`, {
+        headers: {
+          'Authorization' : studentid
+        }
+      })
+        .then((data) => {
+          data.data.forEach(element => {
+            this.allSubjects.push(element)
+          });
+          console.log(this.allSubjects)
+      })
+
+  },
+
+  methods: {
     goStudent () {
       this.$router.push({ path: '/student/main'})
     },
@@ -72,7 +110,32 @@ export default {
     },
     goStaff () {
       this.$router.push({ path: '/staff/main'})
-    }
+    },
+    withdrawSubject (subjectID,sectionNo) {
+      var studentid = getCookie('username')
+      axios.put(API + `/v2/students/${studentid}/registered/withdraw`, {
+        "subjectId": subjectID,
+        "year": this.year,
+        "semester": this.semester,
+        "sectionNo": sectionNo,
+      }).then(() => {
+          alert('Withdraw Success')
+          this.allSubjects = []
+
+           var studentid = getCookie('username')
+
+          axios.get(API + `/v2/students/${studentid}/registered/${this.year}/${this.semester}`, {
+            headers: {
+            'Authorization' : studentid
+          }
+          })
+            .then((data) => {
+              data.data.forEach(element => {
+              this.allSubjects.push(element)
+              });
+            })
+        })
+    },
   }
 }
 </script>
