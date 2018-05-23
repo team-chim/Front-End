@@ -35,16 +35,14 @@
             <div style="margin-top:10px; margin-bottom: 3px"><h2><b>ค้นหาข้อเสนอการฝึกงาน</b></h2></div>
             <div style="display: flex; justify-content: center;"><table border = "1" style="margin-top: 20px; align-self: center;">
               <tr>
-                <th>Offer ID</th>
-                <th>ปี</th>
                 <th>บริษัท</th>
+                <th>ปี</th>
                 <th>ตำแหน่ง</th>
                 <th>คำอธิบาย</th>
               </tr>
               <tr v-for="offer in offers" :key="offer.OfferID">
-                <td>{{ offer.OfferID}}</td>
-                <td>{{ offer.Year}}</td>
                 <td>{{ offer.NameEN}}</td>
+                <td>{{ offer.Year}}</td>
                 <td>{{ offer.PositionNameEN }}<br>{{ offer.PositionNameTH === null ? "" : offer.PositionNameTH }}</td>
                 <td>{{ offer.PositionDescriptionEN }}<br>{{ offer.PositionDescriptionTH === null ? "" : offer.PositionDescriptionTH }}</td>
               </tr>
