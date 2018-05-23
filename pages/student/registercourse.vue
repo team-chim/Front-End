@@ -31,10 +31,10 @@
             </ul>
           </b-col>
           <b-col style="background-color: lightblue">
-            <h1>ลงทะเบียนเรียน</h1><br>
+            <div style="margin-top: 3px; margin-bottom: 3px;"><b>ลงทะเบียนเรียน</b></div><br>
             <div>รหัสวิชา :<input v-model="SubjectID" placeholder="SubjectID"></div>
-            <div>หมายเลข Section :<input v-model="Section" placeholder="Section No."></div>
-            <button v-on:click="alert(`ลงทะเบียนเรียบร้อย`)">ลงทะเบียน</button>
+            <div>หมายเลข Section :<input v-model="SectionNo" placeholder="Section No."></div>
+            <button v-on:click="register()">ลงทะเบียน</button>
             </b-col>
         </b-row>
       </b-container>
@@ -65,9 +65,8 @@ export default {
 
   data: function() {
     return {
-      StudentID: 0,
       SubjectID: 0,
-      Year: 2018,
+      Year: 2017,
       Semester: 2,
       SectionNo: 0
     }
@@ -91,12 +90,20 @@ export default {
     goStudent () {
       this.$router.push({ path: '/teacher/main'})
     },
-    alert () {
-      alert(`ลงทะเบียนเรียบร้อย`)
+    register () {
+      var studentid = getCookie('username')
+      axios.put(API + `/v2/students/${studentid}/registered/register`, {
+        "subjectId": this.SubjectID,
+        "year": this.Year,
+        "semester": this.Semester,
+        "sectionNo": this.SectionNo,
+      }).then((error) => {
+        if(!error){
+          alert('Register Success')
+        }
+      })
     },
-    goStaff () {
-      this.$router.push({ path: '/staff/main'})
-    }
+
   }
 }
 </script>

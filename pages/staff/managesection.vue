@@ -27,7 +27,11 @@
               <li><a href="/staff/createinternship">เพิ่มปีการศึกษา/Section ของวิชาฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightpink">จัดการข้อมูล Section</b-col>
+          <b-col style="background-color: lightpink">
+            <div style="margin-top: 3px; margin-bottom: 3px;"><b>จัดการข้อมูล Section</b></div><br>
+            <div>รหัสวิชา :<input v-model="subjectID" placeholder="รหัสวิชา">ชื่อวิชา (ภาษาไทย):<input v-model="subjectNameTH" placeholder="รหัสวิชา">Subject Name (English):<input v-model="subjectNameEN" placeholder="รหัสวิชา"> น้ำหนัก :<input v-model="credit" placeholder="หน่วยกิต"> <button @click="addSubject">เพิ่มวิชา</button></div>
+
+          </b-col>
         </b-row>
       </b-container>
     </div>

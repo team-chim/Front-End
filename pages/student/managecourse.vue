@@ -31,8 +31,11 @@
             </ul>
           </b-col>
           <b-col style="background-color: lightblue">
-          <h1>เพิ่ม ลด วิชาเรียน</h1>
-          <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}}</a></li>
+          <div style="margin-top: 3px; margin-bottom: 3px;"><h2><b>ลงทะเบียนเรียน</b></h2></div><br>
+          <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}}</a><button style="margin-left: 3px;" v-on:click="dropSubject(subjects.SubjectID)">ลดรายวิชา</button></li>
+          <div style="margin-top: 30px; margin-bottom: 20px;"><h2><b>เพิ่มรายวิชา</b></h2></div>
+          <div>รหัสวิชา :<input v-model="SubjectID" placeholder="SubjectID"> หมายเลข Section :<input v-model="SectionNo" placeholder="Section No."> <button v-on:click="register()">ลงทะเบียน</button></div>
+
           </b-col>
         </b-row>
       </b-container>
