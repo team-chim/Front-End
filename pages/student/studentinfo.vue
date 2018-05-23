@@ -43,9 +43,9 @@
                 <th>ชื่อ</th>
                 <td>{{studentinfo.FnameTH === null ? "-" : studentinfo.FnameTH }}</td>
               </tr>
-              <tr>
+              <tr v-if="studentinfo.MnameTH !== null">
                 <th>ชื่อกลาง</th>
-                <td>{{studentinfo.MnameTH === null ? "-" : studentinfo.MnameTH }}</td>
+                <td>{{studentinfo.MnameTH}}</td>
               </tr>
               <tr>
                 <th>นามสกุล</th>
@@ -55,9 +55,9 @@
                 <th>First Name</th>
                 <td>{{studentinfo.FnameEN === null ? "-" : studentinfo.FnameEN }}</td>
               </tr>
-              <tr>
+              <tr v-if="studentinfo.MnameEN !== null">
                 <th>Middle Name</th>
-                <td>{{studentinfo.MnameEN === null ? "-" : studentinfo.MnameEN }}</td>
+                <td>{{studentinfo.MnameEN}}</td>
               </tr>
               <tr>
                 <th>Last Name</th>
