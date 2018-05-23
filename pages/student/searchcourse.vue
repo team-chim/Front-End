@@ -47,7 +47,7 @@
               <option value=3>ฤดูร้อน</option>
             </select>
             <button @click="seachSubject">ค้นหา</button>
-            <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}}</a></li>
+            <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameAbv}}</a></li>
           </b-col>
           <b-col>
             <ul style="margin-bottom: 2px;">{{subject.SubjectID}}</ul>
@@ -57,6 +57,24 @@
             <!-- <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul> -->
             <ul style="margin-bottom: 2px;">{{subject.FinalStartDatetime  === undefined ? "" : `วันสอบปลายภาค: ${subject.FinalStartDatetime} - ${subject.FinalEndDatetime}`}}</ul>
             <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
+
+            <ul v-if="subject.requirements && subject.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subject.requirements}}</ul>
+            
+            <table v-if="subject.sections && subject.sections.length > 0" border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>Section No</th>
+                <th>Classroom</th>
+                <th>Instructor</th>
+                <th>Capacity</th>
+              </tr>
+              <tr v-for="section in subject.sections" :key="section.SectionNo">
+                  <td>{{section.SectionNo}}</td>
+                  <td>{{section.Classroom}}</td>
+                  <td>{{section.TeacherName}}</td>
+                  <td>{{section.CurrentStudent}} / {{section.MaxStudent}}</td>
+              </tr>
+            </table>
+            
           </b-col>
           </b-row>
             </b-col>
@@ -140,7 +158,7 @@ export default {
       })
         .then((data) => {
           this.subject = data.data
-          console.log(data.data.MidtermStartDatetime)
+          console.log(data.data)
           this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:mm")
           this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:mm")
           this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:mm")
