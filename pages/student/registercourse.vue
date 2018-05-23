@@ -35,6 +35,7 @@
             <div>รหัสวิชา :<input v-model="SubjectID" placeholder="SubjectID"></div>
             <div>หมายเลข Section :<input v-model="SectionNo" placeholder="Section No."></div>
             <button v-on:click="register()">ลงทะเบียน</button>
+
             </b-col>
         </b-row>
       </b-container>

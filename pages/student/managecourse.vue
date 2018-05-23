@@ -31,7 +31,7 @@
             </ul>
           </b-col>
           <b-col style="background-color: lightblue">
-          <div style="margin-top: 3px; margin-bottom: 3px;"><h2><b>ลงทะเบียนเรียน</b></h2></div><br>
+          <div style="margin-top: 3px; margin-bottom: 3px;"><h3><b>วิชาเรียนในปีการศึกษา {{year}} ภาคการศึกษา{{semester === 1 ? "ต้น" : semester === 2 ? "ปลาย" : "ภาคฤดูร้อน"}}</b></h3></div><br>
           <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}} Section : {{subjects.SectionNo}}</a><button style="margin-left: 3px;" v-on:click="dropSubject(subjects.SubjectID,subjects.SectionNo)">ลดรายวิชา</button></li>
           <div style="margin-top: 30px; margin-bottom: 20px;"><h2><b>เพิ่มรายวิชา</b></h2></div>
           <div>รหัสวิชา :<input v-model="SubjectID" placeholder="SubjectID"> หมายเลข Section :<input v-model="SectionNo" placeholder="Section No."> <button v-on:click="register()">ลงทะเบียน</button></div>
@@ -91,7 +91,7 @@ export default {
 
       var studentid = getCookie('username')
 
-      axios.get(API + `/v2/students/${studentid}/registered`, {
+      axios.get(API + `/v2/students/${studentid}/registered/${this.year}/${this.semester}`, {
         headers: {
           'Authorization' : studentid
         }
@@ -122,31 +122,24 @@ export default {
         "year": this.year,
         "semester": this.semester,
         "sectionNo": this.SectionNo,
-      }).then((error) => {
-        if(!error){
+      }).then(() => {
+
           alert('Register Success')
-          update()
-        }
+          this.allSubjects = []
+
+          axios.get(API + `/v2/students/${studentid}/registered/${this.year}/${this.semester}`, {
+            headers: {
+              'Authorization' : studentid
+            }
+          })
+            .then((data) => {
+              data.data.forEach(element => {
+                this.allSubjects.push(element)
+              });
+              console.log(this.allSubjects)
+          })
       })
     },
-    update () {
-      this.allSubjects = []
-
-      var studentid = getCookie('username')
-
-      axios.get(API + `/v2/students/${studentid}/registered`, {
-        headers: {
-          'Authorization' : studentid
-        }
-      })
-        .then((data) => {
-          data.data.forEach(element => {
-            this.allSubjects.push(element)
-          });
-          console.log(this.allSubjects)
-      })
-    },
-
     dropSubject (subjectID,sectionNo) {
       var studentid = getCookie('username')
       axios.put(API + `/v2/students/${studentid}/registered/drop`, {
@@ -154,12 +147,23 @@ export default {
         "year": this.year,
         "semester": this.semester,
         "sectionNo": sectionNo,
-      }).then((error) => {
-        if(!error){
+      }).then(() => {
           alert('Drop Success')
-          update()
-        }
-      })
+          this.allSubjects = []
+
+           var studentid = getCookie('username')
+
+          axios.get(API + `/v2/students/${studentid}/registered/${this.year}/${this.semester}`, {
+            headers: {
+            'Authorization' : studentid
+          }
+          })
+            .then((data) => {
+              data.data.forEach(element => {
+              this.allSubjects.push(element)
+              });
+            })
+        })
     },
 
 
