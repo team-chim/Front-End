@@ -132,10 +132,10 @@ export default {
         .then((data) => {
           this.subject = data.data
           console.log(data.data.MidtermStartDatetime)
-          this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:MM")
-          this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:MM")
-          this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:MM")
-          this.subject.FinalEndDatetime = moment(data.data.FinalEndDatetime).utc().format("HH:MM")
+          this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:mm")
+          this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:mm")
+          this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:mm")
+          this.subject.FinalEndDatetime = moment(data.data.FinalEndDatetime).utc().format("HH:mm")
       })
 
     },
