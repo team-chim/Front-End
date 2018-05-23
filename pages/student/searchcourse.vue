@@ -53,9 +53,11 @@
             <ul style="margin-bottom: 2px;">{{subject.SubjectID}}</ul>
             <ul style="margin-bottom: 2px;">{{subject.NameEN}}</ul>
             <ul style="margin-bottom: 2px;">{{subject.NameTH}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.MidtermStartDatetime === undefined ? "" : `วันสอบกลางภาค: ${subject.MidtermStartDatetime} - ${subject.MidtermEndDatetime}`  }}</ul>
+            <ul v-if="subject.HasMidterm" style="margin-bottom: 2px;">วันสอบกลางภาค: {{subject.MidtermStartDatetime}} - {{subject.MidtermEndDatetime}}</ul>
+            <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบกลางภาคภายหลัง (AR)</ul> -->
             <!-- <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul> -->
-            <ul style="margin-bottom: 2px;">{{subject.FinalStartDatetime  === undefined ? "" : `วันสอบปลายภาค: ${subject.FinalStartDatetime} - ${subject.FinalEndDatetime}`}}</ul>
+            <ul v-if="subject.HasFinal" style="margin-bottom: 2px;">วันสอบปลายภาค: {{subject.FinalStartDatetime}} - {{subject.FinalEndDatetime}}</ul>
+            <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบปลายภาคภายหลัง (AR)</ul> -->
             <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
 
             <ul v-if="subject.requirements && subject.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subject.requirements}}</ul>
@@ -158,11 +160,19 @@ export default {
       })
         .then((data) => {
           this.subject = data.data
-          console.log(data.data)
-          this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:mm")
-          this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:mm")
-          this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:mm")
-          this.subject.FinalEndDatetime = moment(data.data.FinalEndDatetime).utc().format("HH:mm")
+          console.log(data.data.MidtermStartDatetime)
+
+          this.subject.HasMidterm = data.data.MidtermStartDatetime && data.data.MidtermEndDatetime;
+          if (this.subject.HasMidterm) {
+            this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:mm")
+            this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:mm")
+          } 
+
+          this.subject.HasFinal = data.data.FinalStartDatetime && data.data.FinalEndDatetime
+          if (this.subject.HasFinal) {
+            this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:mm")
+            this.subject.FinalEndDatetime = moment(data.data.FinalEndDatetime).utc().format("HH:mm")
+          }
       })
 
     },
