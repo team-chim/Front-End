@@ -27,7 +27,28 @@
               <li><a href="/staff/createinternship">เพิ่มปีการศึกษา/Section ของวิชาฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightpink">เพิ่มนิสิต, อาจารย์</b-col>
+          <b-col style="background-color: lightpink">
+            <div style="margin-top: 10px; margin-bottom: 20px;"><h1><b>เพิ่มนิสิต, อาจารย์</b></h1></div>
+            <div>รหัสนิสิต, อาจารย์:<input v-model="ID" placeholder="ID"></div>
+            <div>ชื่อ (ภาษาไทย):<input v-model="fNameTh" placeholder="ภาษาไทย"></div>
+            <div>ชื่อกลาง (ภาษาไทย):<input v-model="mNameTh" placeholder="ภาษาไทย"></div>
+            <div>นามสกุล (ภาษาไทย):<input v-model="lNameTh" placeholder="ภาษาไทย"></div>
+            <div>First Name (English):<input v-model="fNameEn" placeholder="English"></div>
+            <div>Middle Name (English):<input v-model="mNameEn" placeholder="English"></div>
+            <div>Last Name (English):<input v-model="lNameEn" placeholder="English"></div>
+            <div>E-mail:<input v-model="email" placeholder="email"></div>
+            <div>เบอร์โทรศัพท์ติดต่อ (เฉพาะอาจารย์เท่านั้น):<input v-model="telNo" placeholder="Tel No."></div>
+            <div>รหัสครูที่ปรึกษา (Adviser ID) (เฉพาะนิสิตป.ตรีเท่านั้น) :<input v-model="adviser" placeholder="Adviser"></div>
+            <div>สัญชาติ (Nationality) (เฉพาะนิสิตเท่านั้น):<input v-model="nation" placeholder="Nationality"></div>
+            <div>คณะเอก (Major Faculty)(นิสิต) หรือ ทำงานที่คณะ(อาจารย์):<input v-model="majorFaculty" placeholder="Major Faculty"></div>
+            <div>ภาควิชาเอก (Major Department)(นิสิต) หรือ ทำงานที่คณะ(อาจารย์):<input v-model="majorDepartment" placeholder="Major Department"></div>
+            <div style="margin-top: 10px;">
+              <button @click="addundergrad" style="margin-right: 3px;">เพิ่มนิสิต ป.ตรี</button>
+              <button @click="addgrad" style="margin-right: 3px;">เพิ่มนิสิต ป.โท</button>
+              <button @click="addTeacher">เพิ่มครู</button>
+            </div>
+
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -35,6 +56,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -51,6 +76,24 @@ export default {
   components: {
   },
 
+  data: function() {
+    return {
+       ID: 0,
+       fNameTh: "",
+       mNameTh: "",
+       lNameTh: "",
+       fNameEn: "",
+       mNameEn: "",
+       lNameEn: "",
+       email: "",
+       telNo: "",
+       adviser: "",
+       nation: "",
+       majorFaculty: "",
+       majorDepartment: ""
+    }
+  },
+
     beforeMount: function() {
         console.log("hello")
         console.log(getCookie('username'))
@@ -60,16 +103,34 @@ export default {
         }
   },
 
-  method: {
-    goStudent () {
-      this.$router.push({ path: '/student/main'})
-    },
-    goStudent () {
-      this.$router.push({ path: '/teacher/main'})
-    },
-    goStaff () {
-      this.$router.push({ path: '/staff/main'})
+  methods: {
+    addundergrad () {
+
+      axios.put(API + `/v2/students/undergrad`,{
+        "studentId": this.ID,
+        "fNameTh": this.fNameTh,
+        "mNameTh": this.mNameTh,
+        "lNameTh": this.lNameTh,
+        "fNameEn": this.fNameEn,
+        "mNameEn": this.mNameEn,
+        "lNameEn": this.lNameEn,
+        "studentEmail": this.email,
+        "adviser": this.adviser,
+        "nation": this.nation,
+        "majorFaculty": this.majorFaculty,
+        "majorDepartment": this.majorDepartment,
+      }).then((response,error) => {
+        if(!error){
+          alert("Add New Undergrad Success!")
+        }
+        else {
+          console.log(error)
+          console.log(response)
+          alert(response.message)
+        }
+      })
     }
+
   }
 }
 </script>

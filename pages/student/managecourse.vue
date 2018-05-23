@@ -31,7 +31,10 @@
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">เพิ่ม ลด วิชาเรียน</b-col>
+          <b-col style="background-color: lightblue">
+          <h1>เพิ่ม ลด วิชาเรียน</h1>
+          <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}}</a></li>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -39,6 +42,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -52,6 +59,17 @@ function getCookie(cname) {
 }
 
 export default {
+
+  data: function(){
+    return {
+    allSubjects: [],
+    subject: {},
+    subjectID: "",
+    year: 2017,
+    semester: 2
+    }
+  },
+
   components: {
   },
 
@@ -62,6 +80,26 @@ export default {
         alert("Session Timeout!")
         this.$router.push('/')
         }
+  },
+
+  mounted: function() {
+
+      this.allSubjects = []
+
+      var studentid = getCookie('username')
+
+      axios.get(API + `/v2/students/${studentid}/registered`, {
+        headers: {
+          'Authorization' : studentid
+        }
+      })
+        .then((data) => {
+          data.data.forEach(element => {
+            this.allSubjects.push(element)
+          });
+          console.log(this.allSubjects)
+      })
+
   },
 
   method: {

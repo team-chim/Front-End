@@ -17,7 +17,56 @@
               <li><a href="/teacher/searchcourse">ค้นหารายวิชาเรียน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: azure">ข้อมูลส่วนตัว</b-col>
+          <b-col style="background-color: azure">
+            <div style="margin-top:10px; margin-bottom: 3px;"><h2><b>ข้อมูลส่วนตัว</b></h2></div>
+            <div style="display: flex; justify-content: center;">
+              <table border = "1" style="margin-top: 20px; align-self: center; width: 100%;">
+              <tr>
+                <th>รหัสครู</th>
+                <td>{{teacherinfo.TeacherID === null ? "-" : teacherinfo.TeacherID }}</td>
+              </tr>
+              <tr>
+                <th>ชื่อ</th>
+                <td>{{teacherinfo.FnameTH === null ? "-" : teacherinfo.FnameTH }}</td>
+              </tr>
+              <tr>
+                <th>ชื่อกลาง</th>
+                <td>{{teacherinfo.MnameTH === null ? "-" : teacherinfo.MnameTH }}</td>
+              </tr>
+              <tr>
+                <th>นามสกุล</th>
+                <td>{{teacherinfo.LnameTH === null ? "-" : teacherinfo.LnameTH}}</td>
+              </tr>
+              <tr>
+                <th>First Name</th>
+                <td>{{teacherinfo.FnameEN === null ? "-" : teacherinfo.FnameEN }}</td>
+              </tr>
+              <tr>
+                <th>Middle Name</th>
+                <td>{{teacherinfo.MnameEN === null ? "-" : teacherinfo.MnameEN }}</td>
+              </tr>
+              <tr>
+                <th>Last Name</th>
+                <td>{{teacherinfo.LnameEN === null ? "-" : teacherinfo.LnameEN}}</td>
+              </tr>
+              <tr>
+                <th>คณะ (Faculty)</th>
+                <td>{{facultyinfo.NameTH === null ? "-" : facultyinfo.NameTH}} ({{facultyinfo.NameEN === null ? "-" : facultyinfo.NameEN}})</td>
+              </tr>
+              <tr>
+                <th>สาขา (Department)</th>
+                <td>{{departmentinfo.NameTH === null ? "-" : departmentinfo.NameTH}} ({{departmentinfo.NameEN === null ? "-" : departmentinfo.NameEN}})</td>
+              </tr>
+              <tr>
+                <th>เบอร์โทรศัพท์ติดต่อ</th>
+                <td>{{teacherinfo.TelNo === null ? "-" : teacherinfo.TelNo}}</td>
+              </tr>
+              <tr>
+                <th>อีเมล (E-mail Address)</th>
+                <td>{{teacherinfo.TeacherEmail === null ? "-" : teacherinfo.TeacherEmail}}</td>
+              </tr>
+            </table>
+            </div></b-col>
         </b-row>
       </b-container>
     </div>
@@ -25,6 +74,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -38,19 +90,67 @@ function getCookie(cname) {
 }
 
 export default {
-  components: {
+
+  data: function () {
+      return {
+        teacherinfo: {},
+        facultyinfo: {},
+        departmentinfo: {}
+      }
   },
 
-    beforeMount: function() {
-        console.log("hello")
-        console.log(getCookie('username'))
+  components: {
+
+  },
+
+
+  beforeMount: function() {
+
         if (getCookie('username') === ""){
         alert("Session Timeout!")
         this.$router.push('/')
         }
   },
 
-  method: {
+  mounted : function() {
+
+      this.teacherinfo = {}
+      this.facultyinfo = {}
+      this.departmentinfo = {}
+
+      var teacherid = getCookie('username')
+
+      axios.get(API + `/v2/teachers/${teacherid}/`,{
+        headers: {
+          'Authorization' : teacherid
+        }
+      }).then((data) => {
+        this.teacherinfo = data.data[0]
+        console.log(this.teacherinfo)
+
+        axios.get(API + `/v2/faculties/${data.data[0].WorksForFaculty}`,{
+        headers: {
+          'Authorization' : teacherid
+        }
+        }).then((dataa) => {
+          this.facultyinfo = dataa.data
+          console.log(this.facultyinfo)
+          })
+
+        axios.get(API + `/v2/faculties/${data.data[0].WorksForFaculty}/departments/${data.data[0].WorksForDepartment}`,{
+            headers: {
+              'Authorization' : teacherid
+            }
+          }).then((dataa) => {
+            this.departmentinfo = dataa.data[0]
+            console.log(this.departmentinfo)
+
+      })
+      })
+
+  },
+
+  methods: {
     goStudent () {
       this.$router.push({ path: '/student/main'})
     },

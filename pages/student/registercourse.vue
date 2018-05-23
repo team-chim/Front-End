@@ -44,6 +44,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -78,6 +82,8 @@ export default {
         this.$router.push('/')
         }
   },
+
+
 
   methods: {
     goStudent () {

@@ -17,7 +17,29 @@
               <li><a href="/teacher/searchcourse">ค้นหารายวิชาเรียน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: azure">ดูรายชื่อนิสิตใน section</b-col>
+          <b-col style="background-color: azure">
+            <div style="margin-top:10px; margin-bottom: 3px; "><h2><b>ดูรายชื่อนิสิตใน section</b></h2></div>
+            <b-row>
+          <b-col cols="4">
+            <select v-model="year">
+              <option value=2016>2016</option>
+              <option value=2017>2017</option>
+              <option value=2018>2018</option>
+            </select>
+            <select v-model="semester">
+              <option value=1>ต้น</option>
+              <option value=2>ปลาย</option>
+              <option value=3>ฤดูร้อน</option>
+            </select>
+            <button @click="seachSubject">ค้นหา</button>
+            <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID,subjects.SectionNo,subjects.Semester,subjects.Year)">{{subjects.SubjectID}} Section : {{subjects.SectionNo}} Semester : {{subjects.Semester}} Year : {{subjects.Year}}</a></li>
+          </b-col>
+          <b-col>
+             <div style="margin-top:10px; margin-bottom: 3px; "><b>รายชื่อนิสิตในวิชา {{showSubjectID}} Section {{showSectionNo}} ภาคการศึกษา{{showSemester === 1 ? "ต้น" : showSemester === 2 ? ปลาย : ฤดูร้อน }} ปีการศึกษา {{showYear}}</b></div>
+            <ol v-for="student in students" :key="student.StudentID">{{student.StudentID}} {{student.StudentName}}</ol>
+          </b-col>
+          </b-row>
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -25,6 +47,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -41,25 +67,89 @@ export default {
   components: {
   },
 
-    beforeMount: function() {
-        console.log("hello")
-        console.log(getCookie('username'))
-        if (getCookie('username') === ""){
-        alert("Session Timeout!")
-        this.$router.push('/')
-        }
+  data: function(){
+    return {
+    allSubjects: [],
+    students: [],
+    subjectID: "",
+    showSubjectID: "",
+    showSectionNo: "",
+    showSemester: "",
+    showYear: "",
+    year: 2017,
+    semester: 2
+    }
   },
 
-  method: {
-    goStudent () {
-      this.$router.push({ path: '/student/main'})
+  beforeMount: function() {
+      console.log("hello")
+      console.log(getCookie('username'))
+      if (getCookie('username') === ""){
+      alert("Session Timeout!")
+      this.$router.push('/')
+      }
+  },
+
+  mounted: function() {
+
+      this.allSubjects = []
+      var teacherid = getCookie('username')
+
+      axios.get(API + `/v2/teachers/${teacherid}/schedules/teach/${this.year}/${this.semester}`, {
+        headers: {
+          'Authorization' : teacherid
+        }
+      })
+        .then((data) => {
+          data.data.forEach(element => {
+            this.allSubjects.push(element)
+          });
+          console.log(this.allSubjects)
+      })
+
+  },
+
+
+
+  methods: {
+    async seachSubject () {
+      this.allSubjects = []
+
+      var teacherid = getCookie('username')
+
+        axios.get(API + `/v2/teachers/${teacherid}/schedules/teach/${this.year}/${this.semester}`, {
+        headers: {
+          'Authorization' : teacherid
+        }
+        })
+        .then((data) => {
+          this.allSubjects.push(data.data)
+          console.log(this.allSubjects)
+      })
     },
-    goStudent () {
-      this.$router.push({ path: '/teacher/main'})
+
+    async search (subjectID,sectionNo,semester,year) {
+
+      this.subject = []
+      this.students = []
+      this.showSubjectID = subjectID
+      this.showSectionNo = sectionNo
+      this.showSemester = semester
+      this.showYear = year
+      var studentid = getCookie('username')
+
+
+      axios.get(API + `/v2/subjects/${subjectID}/${year}/${semester}/sections/${sectionNo}/students`, {
+        headers: {
+          'Authorization' : studentid
+        }
+      })
+        .then((data) => {
+          this.students = data.data
+          console.log(this.students)
+      })
+
     },
-    goStaff () {
-      this.$router.push({ path: '/staff/main'})
-    }
   }
 }
 </script>

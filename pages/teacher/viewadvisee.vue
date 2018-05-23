@@ -17,7 +17,17 @@
               <li><a href="/teacher/searchcourse">ค้นหารายวิชาเรียน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: azure">ดูรายชื่อนิสิตที่ปรึกษา</b-col>
+          <b-col style="background-color: azure; align-items:flex-start;justify-content:flex-start;" >
+            <div style="margin-top:10px; margin-bottom: 3px; "><h2><b>ดูรายชื่อนิสิตที่ปรึกษา</b></h2></div>
+            <div style="display: flex; justify-content: center;">
+            <table border = "1" style="margin-top: 20px; align-self: center;">
+            <tr v-for="advisee in adviseeList" :key="advisee.StudentID">
+                <td>{{ advisee.StudentID}}</td>
+                <td>{{ advisee.StudentName}}</td>
+            </tr>
+            </table>
+            </div>
+          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -25,6 +35,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -38,6 +51,13 @@ function getCookie(cname) {
 }
 
 export default {
+
+  data: function() {
+     return {
+       adviseeList: []
+     }
+  },
+
   components: {
   },
 
@@ -50,7 +70,24 @@ export default {
         }
   },
 
-  method: {
+  mounted : function() {
+
+      this.adviseeList = []
+
+      var teacherid = getCookie('username')
+
+      axios.get(API + `/v2/teachers/${teacherid}/advisees`,{
+        headers: {
+          'Authorization' : teacherid
+        }
+      }).then((data) => {
+        this.adviseeList = data.data
+        console.log(this.adviseeList)
+      })
+
+  },
+
+  methods: {
     goStudent () {
       this.$router.push({ path: '/student/main'})
     },
