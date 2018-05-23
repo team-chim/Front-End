@@ -27,11 +27,22 @@
               <li><a href="/student/manageinternship">จัดการการฝึกงาน</a></li>
               <li><a href="/student/sendinternshipreport">ส่งรายงานการฝึกงาน</a></li>
               <li><a href="/student/searchinternshipoffer">ค้นหาข้อเสนอการฝึกงาน</a></li>
-              <li><a href="/student/reviewinternship">Review การฝึกงาน</a></li>
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
-          <b-col style="background-color: lightblue">ค้นหา Review การฝึกงาน</b-col>
+          <b-col style="background-color: lightblue">
+            <div style="margin-top: 3px; margin-bottom: 3px;"><b>ค้นหา Review การฝึกงาน</b></div><br>
+            <b-row>
+            <b-col cols="4">
+              <div style="margin-top:10px; margin-bottom: 3px; "><b>รายชื่อบริษัท</b></div>
+            <li style="margin-bottom: 2px; cursor: pointer;" v-for="company in companies" :key="company.CompanyID"><a v-on:click="search(company.CompanyID,company.companyName)">{{company.NameTH}} {{company.NameEN}}</a></li>
+          </b-col>
+          <b-col>
+             <div style="margin-top:10px; margin-bottom: 3px; "><b>Review บริษัท {{showCompanyName}}</b></div>
+            <ol v-for="review in reviews">{{review.Comment}} Score : {{review.Rating}}</ol>
+          </b-col>
+          </b-row>
+            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -39,6 +50,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import moment from 'moment'
+const {API} =  require('../../api.config');
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -55,6 +70,15 @@ export default {
   components: {
   },
 
+  data: function () {
+    return {
+      companies: [],
+      reviews: [],
+      showCompanyName: ""
+    }
+
+  },
+
     beforeMount: function() {
         console.log("hello")
         console.log(getCookie('username'))
@@ -64,7 +88,27 @@ export default {
         }
   },
 
-  method: {
+  mounted: function() {
+
+      this.companies = []
+      var studentid = getCookie('username')
+
+      axios.get(API + `/v2/companies`, {
+        headers: {
+          'Authorization' : studentid
+        }
+      })
+        .then((data) => {
+          data.data.forEach(element => {
+            this.companies.push(element)
+          });
+          console.log(this.companies)
+      })
+
+  },
+
+
+  methods: {
     goStudent () {
       this.$router.push({ path: '/student/main'})
     },
@@ -73,7 +117,26 @@ export default {
     },
     goStaff () {
       this.$router.push({ path: '/staff/main'})
-    }
+    },
+
+    async search (companyID,companyName) {
+
+      this.reviews = []
+      this.showCompanyName = ""
+      var studentid = getCookie('username')
+
+
+      axios.get(API + `/v2/companies/${companyID}/reviews`, {
+        headers: {
+          'Authorization' : studentid
+        }
+      })
+        .then((data) => {
+          this.reviews = data.data
+          console.log(this.reviews)
+      })
+
+    },
   }
 }
 </script>

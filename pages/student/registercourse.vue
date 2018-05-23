@@ -27,7 +27,6 @@
               <li><a href="/student/manageinternship">จัดการการฝึกงาน</a></li>
               <li><a href="/student/sendinternshipreport">ส่งรายงานการฝึกงาน</a></li>
               <li><a href="/student/searchinternshipoffer">ค้นหาข้อเสนอการฝึกงาน</a></li>
-              <li><a href="/student/reviewinternship">Review การฝึกงาน</a></li>
               <li><a href="/student/searchinternshipreview">ค้นหา Review การฝึกงาน</a></li>
             </ul>
           </b-col>
