@@ -38,14 +38,14 @@
             <div>Last Name (English):<input v-model="lNameEn" placeholder="English"></div>
             <div>E-mail:<input v-model="email" placeholder="email"></div>
             <div>เบอร์โทรศัพท์ติดต่อ (เฉพาะอาจารย์เท่านั้น):<input v-model="telNo" placeholder="Tel No."></div>
-            <div>รหัสครูที่ปรึกษา (Adviser ID) (เฉพาะนิสิตป.ตรีเท่านั้น) :<input v-model="adviser" placeholder="Adviser"></div>
+            <div>รหัสครูที่ปรึกษา (Adviser ID) (เฉพาะนิสิตเท่านั้น) :<input v-model="adviser" placeholder="Adviser"></div>
             <div>สัญชาติ (Nationality) (เฉพาะนิสิตเท่านั้น):<input v-model="nation" placeholder="Nationality"></div>
             <div>คณะเอก (Major Faculty)(นิสิต) หรือ ทำงานที่คณะ(อาจารย์):<input v-model="majorFaculty" placeholder="Major Faculty"></div>
             <div>ภาควิชาเอก (Major Department)(นิสิต) หรือ ทำงานที่คณะ(อาจารย์):<input v-model="majorDepartment" placeholder="Major Department"></div>
             <div style="margin-top: 10px;">
               <button @click="addundergrad" style="margin-right: 3px;">เพิ่มนิสิต ป.ตรี</button>
               <button @click="addgrad" style="margin-right: 3px;">เพิ่มนิสิต ป.โท</button>
-              <button @click="addTeacher">เพิ่มครู</button>
+              <button @click="addteacher">เพิ่มครู</button>
             </div>
 
             </b-col>
@@ -105,7 +105,6 @@ export default {
 
   methods: {
     addundergrad () {
-
       axios.put(API + `/v2/students/undergrad`,{
         "studentId": this.ID,
         "fNameTh": this.fNameTh,
@@ -126,7 +125,59 @@ export default {
         else {
           console.log(error)
           console.log(response)
-          alert(response.message)
+          alert(response.data.message)
+        }
+      })
+    },
+
+    addgrad () {
+      axios.put(API + `/v2/students/grad`,{
+        "studentId": this.ID,
+        "fNameTh": this.fNameTh,
+        "mNameTh": this.mNameTh,
+        "lNameTh": this.lNameTh,
+        "fNameEn": this.fNameEn,
+        "mNameEn": this.mNameEn,
+        "lNameEn": this.lNameEn,
+        "studentEmail": this.email,
+        "adviser": this.adviser,
+        "nation": this.nation,
+        "majorFaculty": this.majorFaculty,
+        "majorDepartment": this.majorDepartment,
+      }).then((response,error) => {
+        if(!error){
+          alert("Add New Grad Success!")
+        }
+        else {
+          console.log(error)
+          console.log(response)
+          alert(response.data.message)
+        }
+      })
+    },
+
+    addteacher () {
+      axios.put(API + `/v2/students/grad`,{
+        "teacherId": this.ID,
+        "fNameTh": this.fNameTh,
+        "mNameTh": this.mNameTh,
+        "lNameTh": this.lNameTh,
+        "fNameEn": this.fNameEn,
+        "mNameEn": this.mNameEn,
+        "lNameEn": this.lNameEn,
+        "teacherEmail": this.email,
+        "TelNo": this.telNo,
+        "WorksForFaculty": this.majorFaculty,
+        "WorksForDepartment": this.majorDepartment,
+        "Since": new Date()
+      }).then((response,error) => {
+        if(!error){
+          alert("Add New Teacher Success!")
+        }
+        else {
+          console.log(error)
+          console.log(response)
+          alert(response.data.message)
         }
       })
     }

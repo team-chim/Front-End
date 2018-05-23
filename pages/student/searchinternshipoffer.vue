@@ -86,7 +86,7 @@ export default {
 
       var studentid = getCookie('username')
 
-      axios.get(API + `/v2/offers/`,{
+      axios.get(API + `/v2/internship/offers`,{
         headers: {
           'Authorization' : studentid
         }
