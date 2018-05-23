@@ -124,12 +124,13 @@ export default {
         }
       }).then((data) => {
         data.data.forEach(element => {
+            console.log(element);
             var subject = {}
             subject.SubjectID = element.SubjectID
             subject.NameEN = element.NameEN
-            subject.Date = moment(element.FinalStartDatetime).utc().format("DD/MM/YYYY")
-            subject.StartTime = moment(element.FinalStartDatetime).utc().format("HH:MM")
-            subject.EndTime = moment(element.FinalEndDatetime).utc().format("HH:MM")
+            subject.Date = moment(element.MidtermStartDatetime).utc().format("DD/MM/YYYY")
+            subject.StartTime = moment(element.MidtermStartDatetime).utc().format("HH:mm")
+            subject.EndTime = moment(element.MidtermEndDatetime).utc().format("HH:mm")
             this.midterm.push(subject)
         })
       })
@@ -144,8 +145,8 @@ export default {
             subject.SubjectID = element.SubjectID
             subject.NameEN = element.NameEN
             subject.Date = moment(element.FinalStartDatetime).utc().format("DD/MM/YYYY")
-            subject.StartTime = moment(element.FinalStartDatetime).utc().format("HH:MM")
-            subject.EndTime = moment(element.FinalEndDatetime).utc().format("HH:MM")
+            subject.StartTime = moment(element.FinalStartDatetime).utc().format("HH:mm")
+            subject.EndTime = moment(element.FinalEndDatetime).utc().format("HH:mm")
             this.final.push(subject)
         })
       })
