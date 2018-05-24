@@ -183,8 +183,8 @@
             console.log(response)
             alert("accepted")
           }).catch(function(error) {
-            console.log(error)
-            alert("error")
+            var err_msg = error.response.data.message;
+            alert(err_msg);
           })
         } else {
           axios.put(API + `/v2/students/${studentid}/official_internship`, {
@@ -202,8 +202,8 @@
             console.log(response)
             alert("accepted")
           }).catch(function(error) {
-            console.log(error)
-            alert("error")
+            var err_msg = error.response.data.message;
+            alert(err_msg);
           })
         }
       },
