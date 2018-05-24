@@ -89,7 +89,7 @@
   const {
     API
   } = require('../../api.config');
-  
+
   function getCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
@@ -100,7 +100,7 @@
     }
     return "";
   }
-  
+
   export default {
     data: function() {
       return {
@@ -113,7 +113,7 @@
       }
     },
     components: {},
-  
+
     beforeMount: function() {
       console.log("hello")
       console.log(getCookie('username'))
@@ -124,9 +124,9 @@
     },
     mounted: function() {
       this.allReports = [];
-  
+
       var studentid = getCookie('username')
-  
+
       axios.get(API + `/v2/students/${studentid}/official_internship/reports`, {
         headers: {
           'Authorization': studentid
@@ -139,22 +139,22 @@
         console.log(this.allReports);
       })
     },
-  
+
     methods: {
       getDate() {
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
         var yyyy = today.getFullYear();
-  
+
         if (dd < 10) {
           dd = '0' + dd
         }
-  
+
         if (mm < 10) {
           mm = '0' + mm
         }
-  
+
         today = yyyy + '-' + mm + '-' + dd;
         console.log(typeof(today));
         return today;
@@ -176,6 +176,21 @@
           // console.log(response)
           alert("accepted")
           console.log(response)
+          this.allReports = [];
+
+          var studentid = getCookie('username')
+
+          axios.get(API + `/v2/students/${studentid}/official_internship/reports`, {
+            headers: {
+              'Authorization': studentid
+            }
+          }).then((data) => {
+            data.data.forEach(element => {
+              this.allReports.push(element)
+            });
+            console.log('finish')
+            console.log(this.allReports);
+        })
         }).catch(function(error){
           var err_msg = error.response.data.message;
           alert(err_msg);
@@ -205,7 +220,7 @@
     min-width: 100vw;
     min-height: calc(10/16*100vw);
   }
-  
+
   .input-container {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
@@ -214,20 +229,20 @@
     margin-top: 5px;
     border: 2px solid #ececec
   }
-  
+
   form {
     display: table;
   }
-  
+
   p {
     display: table-row;
   }
-  
+
   label {
     display: table-cell;
     text-align: left;
   }
-  
+
   input {
     display: table-cell;
   }

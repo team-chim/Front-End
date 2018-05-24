@@ -106,7 +106,7 @@
   const {
     API
   } = require('../../api.config');
-  
+
   function getCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
@@ -117,7 +117,7 @@
     }
     return "";
   }
-  
+
   export default {
     data: function() {
       return {
@@ -132,7 +132,7 @@
       }
     },
     components: {},
-  
+
     beforeMount: function() {
       console.log("hello")
       console.log(getCookie('username'))
@@ -140,14 +140,14 @@
         alert("Session Timeout!")
         this.$router.push('/')
       }
-  
+
     },
     mounted: function() {
-  
+
       this.allInternships = []
-  
+
       var studentid = getCookie('username')
-  
+
       axios.get(API + `/v2/students/${studentid}/internships`, {
         headers: {
           'Authorization': studentid
@@ -160,9 +160,9 @@
         console.log(this.allInternships);
       })
     },
-  
+
     methods: {
-  
+
       async addIntern() {
         var studentid = getCookie('username')
         console.log(this.startDate);
@@ -201,13 +201,27 @@
           }).then(function(response) {
             console.log(response)
             alert("accepted")
+            this.allInternships = []
+            var studentid = getCookie('username')
+
+            axios.get(API + `/v2/students/${studentid}/internships`, {
+              headers: {
+                'Authorization': studentid
+              }
+            }).then((data) => {
+              data.data.forEach(element => {
+                this.allInternships.push(element)
+              });
+              console.log('finish')
+              console.log(this.allInternships);
+            })
           }).catch(function(error) {
             var err_msg = error.response.data.message;
             alert(err_msg);
           })
         }
       },
-  
+
       goStudent() {
         this.$router.push({
           path: '/student/main'
@@ -232,7 +246,7 @@
     min-width: 100vw;
     min-height: calc(10/16*100vw);
   }
-  
+
   .input-container {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
@@ -241,20 +255,20 @@
     margin-top: 5px;
     border: 2px solid #ececec
   }
-  
+
   form {
     display: table;
   }
-  
+
   p {
     display: table-row;
   }
-  
+
   label {
     display: table-cell;
     text-align: left;
   }
-  
+
   input {
     display: table-cell;
   }
