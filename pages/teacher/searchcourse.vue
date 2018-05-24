@@ -20,36 +20,61 @@
           <b-col style="background-color: azure">
             <div style="margin-top: 10px; margin-bottom: 20px;"><h1><b>ค้นหารายวิชาเรียน</b></h1></div>
             <b-row>
-          <b-col cols="4">
-            <input placeholder="SubjectID" v-model="subjectID" style="margin-bottom: 10px;">
-            <select v-model="year">
-              <option value=2016>2016</option>
-              <option value=2017>2017</option>
-              <option value=2018>2018</option>
-            </select>
-            <select v-model="semester">
-              <option value=1>ต้น</option>
-              <option value=2>ปลาย</option>
-              <option value=3>ฤดูร้อน</option>
-            </select>
-            <button @click="seachSubject">ค้นหา</button>
-            <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}}</a></li>
-          </b-col>
-          <b-col>
-            <ul style="margin-bottom: 2px;">{{subject.SubjectID}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.NameEN}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.NameTH}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.MidtermStartDatetime === undefined ? "" : `วันสอบกลางภาค: ${subject.MidtermStartDatetime} - ${subject.MidtermEndDatetime}`  }}</ul>
-            <!-- <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul> -->
-            <ul style="margin-bottom: 2px;">{{subject.FinalStartDatetime  === undefined ? "" : `วันสอบปลายภาค: ${subject.FinalStartDatetime} - ${subject.FinalEndDatetime}`}}</ul>
-            <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
-          </b-col>
-          </b-row>
-            <b-col>
+              <b-col cols="4" name="subject-list-area">
+                <input placeholder="SubjectID" v-model="subjectID" style="margin-bottom: 10px;">
+                <input placeholder="Subject Short Name" v-model="subjectAbv" style="margin-bottom: 10px;">
+                <select v-model="year">
+                  <option value=2016>2016</option>
+                  <option value=2017>2017</option>
+                  <option value=2018>2018</option>
+                </select>
+                <select v-model="semester">
+                  <option value=1>ต้น</option>
+                  <option value=2>ปลาย</option>
+                  <option value=3>ฤดูร้อน</option>
+                </select>
+                <select v-model="genedType">
+                  <option value="all">เลือกประเภท Gened</option>
+                  <option value=0>ไม่ใช่ Gen-Ed</option>
+                  <option value=1>สังคมศาสตร์</option>
+                  <option value=2>มนุษยศาสตร์</option>
+                  <option value=3>วิทยาศาสตร์</option>
+                  <option value=4>สหศึกษา</option>
+                </select>
+                <button @click="searchSubject">ค้นหา</button>
+                <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameAbv}}</a></li>
+              </b-col>
+              <b-col name="subject-detail-area">
+                <ul style="margin-bottom: 2px;">{{subject.SubjectID}}</ul>
+                <ul style="margin-bottom: 2px;">{{subject.NameEN}}</ul>
+                <ul style="margin-bottom: 2px;">{{subject.NameTH}}</ul>
+                <ul v-if="subject.HasMidterm" style="margin-bottom: 2px;">วันสอบกลางภาค: {{subject.MidtermStartDatetime}} - {{subject.MidtermEndDatetime}}</ul>
+                <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบกลางภาคภายหลัง (AR)</ul> -->
+                <!-- <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul> -->
+                <ul v-if="subject.HasFinal" style="margin-bottom: 2px;">วันสอบปลายภาค: {{subject.FinalStartDatetime}} - {{subject.FinalEndDatetime}}</ul>
+                <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบปลายภาคภายหลัง (AR)</ul> -->
+                <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
 
-            </b-col>
-            <b-col>
-            </b-col>
+                <ul v-if="subject.requirements && subject.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subject.requirements}}</ul>
+
+                <table v-if="subject.sections && subject.sections.length > 0" border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+                  <tr>
+                    <th>Section No</th>
+                    <th>Classroom</th>
+                    <th>Instructor</th>
+                    <th>Capacity</th>
+                  </tr>
+                  <tr v-for="section in subject.sections" :key="section.SectionNo">
+                      <td>{{section.SectionNo}}</td>
+                      <td>{{section.Classroom}}</td>
+                      <td>{{section.TeacherName}}</td>
+                      <td>{{section.CurrentStudent}} / {{section.MaxStudent}}</td>
+                  </tr>
+                </table>
+
+              </b-col>
+            </b-row>
+
           </b-col>
         </b-row>
       </b-container>
@@ -76,13 +101,16 @@ function getCookie(cname) {
 
 export default {
 
+  
   data: function(){
     return {
-    allSubjects: [],
-    subject: {},
-    subjectID: "",
-    year: 2017,
-    semester: 2
+      allSubjects: [],
+      subject: {},
+      subjectID: "",
+      subjectAbv: "",
+      year: 2017,
+      semester: 2,
+      genedType: "all",
     }
   },
 
@@ -91,26 +119,6 @@ export default {
       alert("Session Timeout!")
       this.$router.push('/')
       }
-  },
-
-  mounted: function() {
-
-      this.allSubjects = []
-
-      var studentid = getCookie('username')
-
-      axios.get(API + `/v2/subjects/`, {
-        headers: {
-          'Authorization' : studentid
-        }
-      })
-        .then((data) => {
-          data.data.forEach(element => {
-            this.allSubjects.push(element)
-          });
-          console.log(this.allSubjects)
-      })
-
   },
 
   components: {
@@ -132,46 +140,71 @@ export default {
         .then((data) => {
           this.subject = data.data
           console.log(data.data.MidtermStartDatetime)
-          this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:mm")
-          this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:mm")
-          this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:mm")
-          this.subject.FinalEndDatetime = moment(data.data.FinalEndDatetime).utc().format("HH:mm")
+
+          this.subject.HasMidterm = data.data.MidtermStartDatetime && data.data.MidtermEndDatetime;
+          if (this.subject.HasMidterm) {
+            this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:mm")
+            this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:mm")
+          }
+
+          this.subject.HasFinal = data.data.FinalStartDatetime && data.data.FinalEndDatetime
+          if (this.subject.HasFinal) {
+            this.subject.FinalStartDatetime = moment(data.data.FinalStartDatetime).utc().format("DD/MM/YYYY HH:mm")
+            this.subject.FinalEndDatetime = moment(data.data.FinalEndDatetime).utc().format("HH:mm")
+          }
       })
 
     },
 
-    async seachSubject () {
+    async searchSubject () {
       this.allSubjects = []
 
       var studentid = getCookie('username')
 
-      if (this.subjectID === "") {
-        axios.get(API + `/v2/subjects/`, {
-        headers: {
-          'Authorization' : studentid
-        }
-        })
-        .then((data) => {
-          data.data.forEach(element => {
-            this.allSubjects.push(element)
-          });
-          console.log(this.allSubjects)
-        })
+      let queries = [];
+
+      if (this.year) {
+        console.log("Has Year Option");
+        queries.push(`year=${this.year}`);
       }
 
-      else {
-        axios.get(API + `/v2/subjects/${this.subjectID}/${this.year}/${this.semester}`, {
+      if (this.semester && this.year) {
+        console.log("Has Semester Option (with year)")
+        queries.push(`semester=${this.semester}`);
+      }
+
+      if (this.subjectID && this.subjectID !== "") {
+        console.log("Has SubjectID");
+        queries.push(`subjectid=${this.subjectID}`);
+      }
+
+      if (this.genedType && this.genedType !== "all") {
+        console.log("Has GenedType");
+        queries.push(`genedtype=${this.genedType}`);
+      }
+
+      if (this.subjectAbv && this.subjectAbv !== "") {
+        console.log("Has Subject Name");
+        queries.push(`subjectname=${this.subjectAbv}`);
+      }
+
+      let query_link;
+      if (queries.length !== 0) {
+        query_link = "?" + queries.join("&");
+      } else {
+        query_link = "";
+      }
+
+
+      console.log("Query URL = ", query_link);
+      axios.get(API + `/v2/subjects/search` + query_link, {
         headers: {
           'Authorization' : studentid
         }
       })
         .then((data) => {
-
-          this.allSubjects.push(data.data)
-
-          console.log(this.allSubjects)
+          this.allSubjects = data.data;
       })
-      }
     }
 
 

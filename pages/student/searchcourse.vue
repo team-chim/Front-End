@@ -34,61 +34,61 @@
 
             <div style="margin-top: 10px; margin-bottom: 20px;"><h1><b>ค้นหารายวิชาเรียน</b></h1></div>
             <b-row>
-          <b-col cols="4">
-            <input placeholder="SubjectID" v-model="subjectID" style="margin-bottom: 10px;">
-            <input placeholder="Subject Short Name" v-model="subjectAbv" style="margin-bottom: 10px;">
-            <select v-model="year">
-              <option value=2016>2016</option>
-              <option value=2017>2017</option>
-              <option value=2018>2018</option>
-            </select>
-            <select v-model="semester">
-              <option value=1>ต้น</option>
-              <option value=2>ปลาย</option>
-              <option value=3>ฤดูร้อน</option>
-            </select>
-            <select v-model="genedType">
-              <option value="all">เลือกประเภท Gened</option>
-              <option value=0>ไม่ใช่ Gen-Ed</option>
-              <option value=1>สังคมศาสตร์</option>
-              <option value=2>มนุษยศาสตร์</option>
-              <option value=3>วิทยาศาสตร์</option>
-              <option value=4>สหศึกษา</option>
-            </select>
-            <button @click="seachSubject">ค้นหา</button>
-            <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameAbv}}</a></li>
+              <b-col cols="4" name="subject-list-area">
+                <input placeholder="SubjectID" v-model="subjectID" style="margin-bottom: 10px;">
+                <input placeholder="Subject Short Name" v-model="subjectAbv" style="margin-bottom: 10px;">
+                <select v-model="year">
+                  <option value=2016>2016</option>
+                  <option value=2017>2017</option>
+                  <option value=2018>2018</option>
+                </select>
+                <select v-model="semester">
+                  <option value=1>ต้น</option>
+                  <option value=2>ปลาย</option>
+                  <option value=3>ฤดูร้อน</option>
+                </select>
+                <select v-model="genedType">
+                  <option value="all">เลือกประเภท Gened</option>
+                  <option value=0>ไม่ใช่ Gen-Ed</option>
+                  <option value=1>สังคมศาสตร์</option>
+                  <option value=2>มนุษยศาสตร์</option>
+                  <option value=3>วิทยาศาสตร์</option>
+                  <option value=4>สหศึกษา</option>
+                </select>
+                <button @click="searchSubject">ค้นหา</button>
+                <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameAbv}}</a></li>
+              </b-col>
+              <b-col name="subject-detail-area">
+                <ul style="margin-bottom: 2px;">{{subject.SubjectID}}</ul>
+                <ul style="margin-bottom: 2px;">{{subject.NameEN}}</ul>
+                <ul style="margin-bottom: 2px;">{{subject.NameTH}}</ul>
+                <ul v-if="subject.HasMidterm" style="margin-bottom: 2px;">วันสอบกลางภาค: {{subject.MidtermStartDatetime}} - {{subject.MidtermEndDatetime}}</ul>
+                <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบกลางภาคภายหลัง (AR)</ul> -->
+                <!-- <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul> -->
+                <ul v-if="subject.HasFinal" style="margin-bottom: 2px;">วันสอบปลายภาค: {{subject.FinalStartDatetime}} - {{subject.FinalEndDatetime}}</ul>
+                <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบปลายภาคภายหลัง (AR)</ul> -->
+                <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
+
+                <ul v-if="subject.requirements && subject.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subject.requirements}}</ul>
+
+                <table v-if="subject.sections && subject.sections.length > 0" border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+                  <tr>
+                    <th>Section No</th>
+                    <th>Classroom</th>
+                    <th>Instructor</th>
+                    <th>Capacity</th>
+                  </tr>
+                  <tr v-for="section in subject.sections" :key="section.SectionNo">
+                      <td>{{section.SectionNo}}</td>
+                      <td>{{section.Classroom}}</td>
+                      <td>{{section.TeacherName}}</td>
+                      <td>{{section.CurrentStudent}} / {{section.MaxStudent}}</td>
+                  </tr>
+                </table>
+
+              </b-col>
+            </b-row>
           </b-col>
-          <b-col>
-            <ul style="margin-bottom: 2px;">{{subject.SubjectID}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.NameEN}}</ul>
-            <ul style="margin-bottom: 2px;">{{subject.NameTH}}</ul>
-            <ul v-if="subject.HasMidterm" style="margin-bottom: 2px;">วันสอบกลางภาค: {{subject.MidtermStartDatetime}} - {{subject.MidtermEndDatetime}}</ul>
-            <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบกลางภาคภายหลัง (AR)</ul> -->
-            <!-- <ul style="margin-bottom: 2px;">{{subject.MidtermEndDatetime}}</ul> -->
-            <ul v-if="subject.HasFinal" style="margin-bottom: 2px;">วันสอบปลายภาค: {{subject.FinalStartDatetime}} - {{subject.FinalEndDatetime}}</ul>
-            <!-- <ul v-else style="margin-bottom: 2px;">คณะจะกำหนดวันสอบปลายภาคภายหลัง (AR)</ul> -->
-            <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
-
-            <ul v-if="subject.requirements && subject.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subject.requirements}}</ul>
-
-            <table v-if="subject.sections && subject.sections.length > 0" border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
-              <tr>
-                <th>Section No</th>
-                <th>Classroom</th>
-                <th>Instructor</th>
-                <th>Capacity</th>
-              </tr>
-              <tr v-for="section in subject.sections" :key="section.SectionNo">
-                  <td>{{section.SectionNo}}</td>
-                  <td>{{section.Classroom}}</td>
-                  <td>{{section.TeacherName}}</td>
-                  <td>{{section.CurrentStudent}} / {{section.MaxStudent}}</td>
-              </tr>
-            </table>
-
-          </b-col>
-          </b-row>
-            </b-col>
         </b-row>
       </b-container>
     </div>
@@ -116,13 +116,13 @@ export default {
 
   data: function(){
     return {
-    allSubjects: [],
-    subject: {},
-    subjectID: "",
-    subjectAbv: "",
-    year: 2017,
-    semester: 2,
-    genedType: "all",
+      allSubjects: [],
+      subject: {},
+      subjectID: "",
+      subjectAbv: "",
+      year: 2017,
+      semester: 2,
+      genedType: "all",
     }
   },
 
