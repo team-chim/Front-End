@@ -98,10 +98,11 @@ export default {
         "year": this.Year,
         "semester": this.Semester,
         "sectionNo": this.SectionNo,
-      }).then((error) => {
-        if(!error){
+      }).then((res) => {
+        console.log(res)
+        // if(res){
           alert('Register Success')
-        }
+        // }
       })
     },
 
