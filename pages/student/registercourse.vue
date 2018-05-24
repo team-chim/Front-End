@@ -42,7 +42,7 @@
               <ul style="margin-bottom: 2px;">{{subjectResult.NameTH}}</ul>
 
               <ul v-if="subjectResult.requirements && subjectResult.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subjectResult.requirements}}</ul>
-              
+
               <table v-if="subjectResult.sections && subjectResult.sections.length > 0" border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
                 <tr>
                   <th>Section No</th>
@@ -56,7 +56,7 @@
                     <td>{{section.TeacherName}}</td>
                     <td>{{section.CurrentStudent}} / {{section.MaxStudent}}</td>
                 </tr>
-              </table> 
+              </table>
             </div>
 
             </b-col>
@@ -125,9 +125,10 @@ export default {
         "sectionNo": this.SectionNo,
       }).then((res) => {
         console.log(res)
-        // if(res){
-          alert('Register Success')
-        // }
+        alert('Register Success')
+      }).catch((err) => {
+        console.log(err)
+        // alert(err.data.message)
       })
     },
 
