@@ -35,7 +35,28 @@
           <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameEN}} Section : {{subjects.SectionNo}}</a><button style="margin-left: 3px;" v-on:click="dropSubject(subjects.SubjectID,subjects.SectionNo)">ลดรายวิชา</button></li>
           <div style="margin-top: 30px; margin-bottom: 20px;"><h2><b>เพิ่มรายวิชา</b></h2></div>
           <div>รหัสวิชา :<input v-model="SubjectID" placeholder="SubjectID"> หมายเลข Section :<input v-model="SectionNo" placeholder="Section No."> <button v-on:click="register()">ลงทะเบียน</button></div>
+          <div v-if="subjectResult" name="quick-search-results">
+              <ul style="margin-bottom: 2px;">{{subjectResult.SubjectID}}</ul>
+              <ul style="margin-bottom: 2px;">{{subjectResult.NameEN}}</ul>
+              <ul style="margin-bottom: 2px;">{{subjectResult.NameTH}}</ul>
 
+              <ul v-if="subjectResult.requirements && subjectResult.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subjectResult.requirements}}</ul>
+
+              <table v-if="subjectResult.sections && subjectResult.sections.length > 0" border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
+                <tr>
+                  <th>Section No</th>
+                  <th>Classroom</th>
+                  <th>Instructor</th>
+                  <th>Capacity</th>
+                </tr>
+                <tr v-for="section in subjectResult.sections" :key="section.SectionNo">
+                    <td>{{section.SectionNo}}</td>
+                    <td>{{section.Classroom}}</td>
+                    <td>{{section.TeacherName}}</td>
+                    <td>{{section.CurrentStudent}} / {{section.MaxStudent}}</td>
+                </tr>
+              </table>
+            </div>
           </b-col>
         </b-row>
       </b-container>
@@ -69,7 +90,9 @@ export default {
     SubjectID: 0,
     SectionNo: 0,
     year: 2017,
-    semester: 2
+    semester: 2,
+
+    subjectResult: {},  // For quick-search
     }
   },
 
@@ -98,7 +121,9 @@ export default {
       })
         .then((data) => {
           data.data.forEach(element => {
+            if(element.Grade !== "W"){
             this.allSubjects.push(element)
+            }
           });
           console.log(this.allSubjects)
       })
@@ -134,7 +159,9 @@ export default {
           })
             .then((data) => {
               data.data.forEach(element => {
+                if(element.Grade !== "W"){
                 this.allSubjects.push(element)
+                }
               });
               console.log(this.allSubjects)
           })
@@ -160,13 +187,27 @@ export default {
           })
             .then((data) => {
               data.data.forEach(element => {
+              if(element.Grade !== "W"){
               this.allSubjects.push(element)
+              }
               });
             })
         })
     },
 
 
+  },
+
+  watch: {
+      SubjectID: function(val, oldVal) {
+
+          if (val && val.trim().length === 7) {
+            let subjectId = val.trim();
+            axios.get(API + `/v2/subjects/${subjectId}/${this.year}/${this.semester}`).then((response) => {
+              this.subjectResult = response.data;
+            })
+          }
+      }
   }
 }
 </script>
