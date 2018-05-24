@@ -174,8 +174,11 @@
           date: this.getDate(),
         }).then(function(response) {
           // console.log(response)
-          // alert("accepted")
+          alert("accepted")
           console.log(response)
+        }).catch(function(error){
+          var err_msg = error.response.data.message;
+          alert(err_msg);
         })
       },
       goStudent() {
