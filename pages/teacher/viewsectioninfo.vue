@@ -35,7 +35,7 @@
             <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID,subjects.SectionNo,subjects.Semester,subjects.Year)">{{subjects.SubjectID}} Section : {{subjects.SectionNo}} Semester : {{subjects.Semester}} Year : {{subjects.Year}}</a></li>
           </b-col>
           <b-col>
-             <div style="margin-top:10px; margin-bottom: 3px; "><b>รายชื่อนิสิตในวิชา {{showSubjectID}} Section {{showSectionNo}} ภาคการศึกษา{{showSemester === 1 ? "ต้น" : showSemester === 2 ? ปลาย : ฤดูร้อน }} ปีการศึกษา {{showYear}}</b></div>
+             <div style="margin-top:10px; margin-bottom: 3px; "><b>รายชื่อนิสิตในวิชา {{showSubjectID}} Section {{showSectionNo}} ภาคการศึกษา{{showSemester === 1 ? "ต้น" : showSemester === 2 ? "ปลาย" : "ฤดูร้อน" }} ปีการศึกษา {{showYear}}</b></div>
             <ol v-for="student in students" :key="student.StudentID">{{student.StudentID}} {{student.StudentName}}</ol>
           </b-col>
           </b-row>
@@ -101,8 +101,18 @@ export default {
         }
       })
         .then((data) => {
+          console.log(data.data)
+          this.allSubjects.push(data.data[0])
           data.data.forEach(element => {
-            this.allSubjects.push(element)
+            let isInsert = true
+              this.allSubjects.forEach(subject => {
+              if (subject.SubjectID === element.SubjectID){
+                isInsert = false
+                }
+              })
+             if (isInsert === true){
+              this.allSubjects.push(element)
+            }
           });
           console.log(this.allSubjects)
       })
