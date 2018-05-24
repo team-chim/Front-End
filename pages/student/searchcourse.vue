@@ -36,6 +36,7 @@
             <b-row>
           <b-col cols="4">
             <input placeholder="SubjectID" v-model="subjectID" style="margin-bottom: 10px;">
+            <input placeholder="Subject Short Name" v-model="subjectAbv" style="margin-bottom: 10px;">
             <select v-model="year">
               <option value=2016>2016</option>
               <option value=2017>2017</option>
@@ -45,6 +46,14 @@
               <option value=1>ต้น</option>
               <option value=2>ปลาย</option>
               <option value=3>ฤดูร้อน</option>
+            </select>
+            <select v-model="genedType">
+              <option value="all">เลือกประเภท Gened</option>
+              <option value=0>ไม่ใช่ Gen-Ed</option>
+              <option value=1>สังคมศาสตร์</option>
+              <option value=2>มนุษยศาสตร์</option>
+              <option value=3>วิทยาศาสตร์</option>
+              <option value=4>สหศึกษา</option>
             </select>
             <button @click="seachSubject">ค้นหา</button>
             <li style="margin-bottom: 2px; cursor: pointer;" v-for="subjects in allSubjects" :key="subjects.SubjectID"><a v-on:click="search(subjects.SubjectID)">{{subjects.SubjectID}} {{subjects.NameAbv}}</a></li>
@@ -110,8 +119,10 @@ export default {
     allSubjects: [],
     subject: {},
     subjectID: "",
+    subjectAbv: "",
     year: 2017,
-    semester: 2
+    semester: 2,
+    genedType: "all",
     }
   },
 
@@ -120,26 +131,6 @@ export default {
       alert("Session Timeout!")
       this.$router.push('/')
       }
-  },
-
-  mounted: function() {
-
-      this.allSubjects = []
-
-      var studentid = getCookie('username')
-
-      axios.get(API + `/v2/subjects/`, {
-        headers: {
-          'Authorization' : studentid
-        }
-      })
-        .then((data) => {
-          data.data.forEach(element => {
-            this.allSubjects.push(element)
-          });
-          console.log(this.allSubjects)
-      })
-
   },
 
   components: {
@@ -182,33 +173,50 @@ export default {
 
       var studentid = getCookie('username')
 
-      if (this.subjectID === "") {
-        axios.get(API + `/v2/subjects/`, {
-        headers: {
-          'Authorization' : studentid
-        }
-        })
-        .then((data) => {
-          data.data.forEach(element => {
-            this.allSubjects.push(element)
-          });
-          console.log(this.allSubjects)
-        })
+      let queries = [];
+
+      if (this.year) {
+        console.log("Has Year Option");
+        queries.push(`year=${this.year}`);
       }
 
-      else {
-        axios.get(API + `/v2/subjects/${this.subjectID}/${this.year}/${this.semester}`, {
+      if (this.semester && this.year) {
+        console.log("Has Semester Option (with year)")
+        queries.push(`semester=${this.semester}`);
+      }
+
+      if (this.subjectID && this.subjectID !== "") {
+        console.log("Has SubjectID");
+        queries.push(`subjectid=${this.subjectID}`);
+      }
+
+      if (this.genedType && this.genedType !== "all") {
+        console.log("Has GenedType");
+        queries.push(`genedtype=${this.genedType}`);
+      }
+
+      if (this.subjectAbv && this.subjectAbv !== "") {
+        console.log("Has Subject Name");
+        queries.push(`subjectname=${this.subjectAbv}`);
+      }
+
+      let query_link;
+      if (queries.length !== 0) {
+        query_link = "?" + queries.join("&");
+      } else {
+        query_link = "";
+      }
+
+
+      console.log("Query URL = ", query_link);
+      axios.get(API + `/v2/subjects/search` + query_link, {
         headers: {
           'Authorization' : studentid
         }
       })
         .then((data) => {
-
-          this.allSubjects.push(data.data)
-
-          console.log(this.allSubjects)
+          this.allSubjects = data.data;
       })
-      }
     }
 
 
