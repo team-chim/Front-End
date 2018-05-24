@@ -36,12 +36,12 @@
             <b-row>
           <b-col cols="4">
             <input placeholder="SubjectID" v-model="subjectID" style="margin-bottom: 10px;">
-            <select>
+            <select v-model="year">
               <option value=2016>2016</option>
               <option value=2017>2017</option>
               <option value=2018>2018</option>
             </select>
-            <select>
+            <select v-model="semester">
               <option value=1>ต้น</option>
               <option value=2>ปลาย</option>
               <option value=3>ฤดูร้อน</option>
@@ -61,7 +61,7 @@
             <!-- <ul style="margin-bottom: 2px;">{{subject.FinalEndDatetime}}</ul> -->
 
             <ul v-if="subject.requirements && subject.requirements.length > 0" style="margin-bottom: 2px;">Requirements {{subject.requirements}}</ul>
-            
+
             <table v-if="subject.sections && subject.sections.length > 0" border = "1" style="margin-top: 20px; margin-bottom: 20px; align-self: center; width: 100%;">
               <tr>
                 <th>Section No</th>
@@ -76,7 +76,7 @@
                   <td>{{section.CurrentStudent}} / {{section.MaxStudent}}</td>
               </tr>
             </table>
-            
+
           </b-col>
           </b-row>
             </b-col>
@@ -166,7 +166,7 @@ export default {
           if (this.subject.HasMidterm) {
             this.subject.MidtermStartDatetime = moment(data.data.MidtermStartDatetime).utc().format("DD/MM/YYYY HH:mm")
             this.subject.MidtermEndDatetime = moment(data.data.MidtermEndDatetime).utc().format("HH:mm")
-          } 
+          }
 
           this.subject.HasFinal = data.data.FinalStartDatetime && data.data.FinalEndDatetime
           if (this.subject.HasFinal) {

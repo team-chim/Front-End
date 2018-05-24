@@ -21,7 +21,8 @@
         "moment": "^2.22.1",
         "nuxt": "^1.0.0",
         "popper.js": "^1.14.3",
-        "vue-moment": "^3.2.0"
+        "vue-moment": "^3.2.0",
+        "vuejs-datetimepicker": "^1.1.6"
     },
     "devDependencies": {
         "cross-env": "^5.1.4"
