@@ -168,7 +168,7 @@ export default {
 
     },
 
-    async seachSubject () {
+    async searchSubject () {
       this.allSubjects = []
 
       var studentid = getCookie('username')

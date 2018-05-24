@@ -94,7 +94,9 @@ export default {
       })
         .then((data) => {
           data.data.forEach(element => {
+            if(element.Grade !== "W"){
             this.allSubjects.push(element)
+            }
           });
           console.log(this.allSubjects)
       })
@@ -131,7 +133,9 @@ export default {
           })
             .then((data) => {
               data.data.forEach(element => {
-              this.allSubjects.push(element)
+                if(element.Grade !== "W"){
+                this.allSubjects.push(element)
+                }
               });
             })
         })
